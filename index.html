@@ -1,13 +1,340 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <title>การเปลี่ยนพรรค กทม. 65 → 69</title>
-<meta http-equiv="refresh" content="0; url=election_flow.html">
-<link rel="canonical" href="election_flow.html">
+<style>
+@font-face { font-family:'SaoChingcha'; src:url('SaoChingcha-Bold.otf') format('opentype'); font-weight:700; }
+@font-face { font-family:'SaoChingcha'; src:url('SaoChingcha-Regular.otf') format('opentype'); font-weight:400; }
+@font-face { font-family:'SaoChingcha'; src:url('SaoChingcha-Light.otf') format('opentype'); font-weight:300; }
+@font-face { font-family:'BKKDraft5'; src:url('BKKDraft5-Regular.otf') format('opentype'); }
+
+:root,[data-theme="dark"]{
+  --bg:#0e0e0e;--fg:#ffffff;--sub:#666;--note:#7a7a7a;--note-b:#cfcfcf;--sec-border:#161616;
+  --tt-bg:rgba(15,15,15,.97);--tt-border:rgba(255,255,255,.1);
+  --panel-bg:rgba(14,14,14,.98);--panel-border:rgba(255,255,255,.12);--panel-hr:rgba(255,255,255,.08);
+  --kind:#777;--arr:#555;--meta:#777;
+  --card-border:rgba(255,255,255,.07);--card-bg:rgba(255,255,255,.015);
+  --person:#ddd;--dvotes:#888;--dist:#888;--dyr:#666;--legend:#666;
+  --btn-bg:rgba(255,255,255,.06);--btn-fg:#aaa;--btn-bg-h:rgba(255,255,255,.14);--btn-fg-h:#fff;
+  --scrim:rgba(0,0,0,.35);
+}
+[data-theme="light"]{
+  --bg:#f6f6f8;--fg:#16161c;--sub:#9a9aa2;--note:#5a5a63;--note-b:#1c1c22;--sec-border:#e5e5ea;
+  --tt-bg:rgba(255,255,255,.98);--tt-border:rgba(0,0,0,.12);
+  --panel-bg:rgba(250,250,252,.98);--panel-border:rgba(0,0,0,.12);--panel-hr:rgba(0,0,0,.08);
+  --kind:#8a8a92;--arr:#aaa;--meta:#888;
+  --card-border:rgba(0,0,0,.09);--card-bg:rgba(0,0,0,.02);
+  --person:#33333a;--dvotes:#777;--dist:#888;--dyr:#999;--legend:#8a8a92;
+  --btn-bg:rgba(0,0,0,.06);--btn-fg:#555;--btn-bg-h:rgba(0,0,0,.12);--btn-fg-h:#000;
+  --scrim:rgba(0,0,0,.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:'SaoChingcha','Sarabun',sans-serif;min-height:100vh;transition:background .25s,color .25s}
+
+.theme-toggle{position:fixed;top:16px;left:18px;z-index:400;width:38px;height:38px;border:1px solid var(--panel-border);
+  background:var(--btn-bg);color:var(--btn-fg);border-radius:10px;font-size:17px;cursor:pointer;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+.theme-toggle:hover{background:var(--btn-bg-h);color:var(--btn-fg-h)}
+
+.page-head{text-align:center;padding:34px 40px 6px}
+.page-head h1{font-family:'BKKDraft5','SaoChingcha',sans-serif;font-size:25px;letter-spacing:.04em;margin-bottom:6px}
+.page-head .sub{font-size:12.5px;color:var(--sub);font-weight:300}
+
+.section{padding:26px 0 14px;border-top:1px solid var(--sec-border);margin-top:14px}
+.count-pill{display:inline-block;margin-top:8px;font-size:11.5px;color:var(--note);border:1px solid var(--sec-border);border-radius:30px;padding:4px 13px;font-weight:300}
+.page-foot{text-align:center;padding:26px 40px 44px;margin-top:18px;border-top:1px solid var(--sec-border);font-size:12px;color:var(--sub);line-height:1.7}
+.page-foot a{color:var(--note-b);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+.page-foot a:hover{opacity:.75}
+.sec-head{text-align:center;padding:0 40px 4px;max-width:860px;margin:0 auto}
+.sec-head h2{font-family:'BKKDraft5','SaoChingcha',sans-serif;font-size:19px;letter-spacing:.02em;margin-bottom:7px}
+.sec-head .note{font-size:12.5px;color:var(--note);font-weight:300;line-height:1.65}
+.sec-head .note b{color:var(--note-b);font-weight:700}
+svg{display:block;margin:0 auto}
+
+.tt{position:fixed;background:var(--tt-bg);border:1px solid var(--tt-border);border-radius:9px;padding:11px 15px;pointer-events:none;opacity:0;transition:opacity .12s;z-index:200;max-width:280px;font-size:12.5px;line-height:1.75;backdrop-filter:blur(10px)}
+
+.panel{position:fixed;top:0;right:0;height:100vh;width:440px;max-width:92vw;background:var(--panel-bg);border-left:1px solid var(--panel-border);
+  transform:translateX(105%);transition:transform .26s cubic-bezier(.4,0,.2,1);z-index:300;display:flex;flex-direction:column;backdrop-filter:blur(14px)}
+.panel.open{transform:translateX(0)}
+.panel-head{padding:20px 22px 14px;border-bottom:1px solid var(--panel-hr);flex:0 0 auto;position:relative}
+.panel-kind{font-size:10.5px;letter-spacing:.08em;color:var(--kind);text-transform:uppercase;margin-bottom:6px}
+.panel-flow{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:700;flex-wrap:wrap}
+.panel-flow .arr{color:var(--arr);font-weight:400}
+.panel-meta{margin-top:7px;font-size:12px;color:var(--meta);display:flex;gap:14px;flex-wrap:wrap}
+.panel-close{position:absolute;top:16px;right:18px;width:28px;height:28px;border:none;background:var(--btn-bg);color:var(--btn-fg);border-radius:7px;font-size:17px;cursor:pointer;line-height:1}
+.panel-close:hover{background:var(--btn-bg-h);color:var(--btn-fg-h)}
+.panel-body{overflow-y:auto;padding:8px 14px 30px;flex:1 1 auto}
+
+.dcard{border:1px solid var(--card-border);border-radius:11px;padding:13px 15px;margin:10px 0;background:var(--card-bg)}
+.dname{font-size:14.5px;font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dname .dist{color:var(--dist);font-size:11.5px;font-weight:400}
+.drow{display:flex;align-items:baseline;gap:8px;font-size:12.5px;line-height:1.7;padding:1px 0}
+.dyr{color:var(--dyr);font-size:10.5px;width:26px;flex:0 0 auto;font-weight:700}
+.dparty{font-weight:700}
+.dperson{color:var(--person)}
+.dvotes{color:var(--dvotes);margin-left:auto;font-variant-numeric:tabular-nums;font-size:11.5px}
+.tags{margin-top:9px;display:flex;gap:7px;flex-wrap:wrap}
+.tag{font-size:10.5px;padding:2px 9px;border-radius:20px;font-weight:700}
+.tag.same{background:rgba(34,197,94,.13);color:#2e9e5b;border:1px solid rgba(34,197,94,.3)}
+.tag.diff{background:rgba(255,103,0,.13);color:#d4660a;border:1px solid rgba(255,103,0,.3)}
+.tag.up{background:rgba(34,197,94,.12);color:#2e9e5b}
+.tag.down{background:rgba(229,57,53,.12);color:#d23b37}
+[data-theme="dark"] .tag.same,[data-theme="dark"] .tag.up{color:#46d27e}
+[data-theme="dark"] .tag.diff{color:#ff8a3d}
+[data-theme="dark"] .tag.down{color:#ff6b67}
+.legend-note{font-size:11px;color:var(--legend);padding:4px 4px 12px;line-height:1.6}
+.scrim{position:fixed;inset:0;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .26s;z-index:250}
+.scrim.open{opacity:1;pointer-events:auto}
+</style>
 </head>
 <body>
-<script>location.replace('election_flow.html');</script>
-<p>กำลังเปิดหน้า… ถ้าไม่เปลี่ยนหน้า <a href="election_flow.html">คลิกที่นี่</a></p>
+<button id="themeToggle" class="theme-toggle" aria-label="สลับโหมดสว่าง/มืด" title="สลับโหมดสว่าง/มืด">☀</button>
+<div class="page-head">
+  <h1>การเปลี่ยนพรรค/กลุ่ม ผู้นำเขต กทม. · ปี 65 → ปี 69</h1>
+  <p class="sub">ผู้สมัครอันดับ 1 แต่ละเขต · 50 เขต · แยกเป็น 2 มุมมอง</p>
+  <div class="count-pill">นับคะแนนแล้ว (อย่างไม่เป็นทางการ 94.99%)</div>
+</div>
+
+<div class="section">
+  <div class="sec-head">
+    <h2>① ที่นั่งเปลี่ยนมือ — มองที่ “เขต”</h2>
+    <p class="note">หน่วย = <b>เขต</b> (50 ที่นั่ง) · เส้นบอกว่า เขตที่พรรคทางซ้ายเคยชนะปี 65 ปี 69 ตกเป็นของพรรคทางขวา<br>เส้นนี้ <b>ไม่ได้</b>แปลว่าเป็นคนเดิมย้ายพรรค — อาจเป็นคนใหม่จากอีกพรรคมาชนะก็ได้ (คลิกที่เส้นเพื่อดูรายเขต)</p>
+  </div>
+  <svg id="chartSeat" width="980" height="680"></svg>
+</div>
+
+<div class="section">
+  <div class="sec-head">
+    <h2>② คนเดิมย้ายพรรค — มองที่ “คน”</h2>
+    <p class="note">หน่วย = <b>คน</b> · เฉพาะ “คนเดิม” (ผู้ชนะคนเดียวกันทั้งสองปี) ที่<b>ย้ายพรรค/กลุ่มจริง</b> — 20 คน<br>คนเดิมที่อยู่พรรคเดิม และเขตที่ได้คนใหม่ ไม่อยู่ในกราฟนี้ · คลิกดูรายชื่อ</p>
+  </div>
+  <svg id="chartPerson" width="980" height="540"></svg>
+</div>
+
+<footer class="page-foot">
+  ข้อมูลจาก <a href="https://www.thaipbs.or.th/bkkelection69/result" target="_blank" rel="noopener">Thai PBS — ผลการเลือกตั้ง ส.ก. กทม. 2569</a><br>
+  นับคะแนนแล้ว (อย่างไม่เป็นทางการ 94.99%) · เปรียบเทียบเฉพาะผู้สมัครอันดับ 1 ของแต่ละเขต
+</footer>
+
+<div class="tt" id="tt"></div>
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel">
+  <div class="panel-head">
+    <button class="panel-close" id="panelClose">×</button>
+    <div class="panel-kind" id="panelKind"></div>
+    <div class="panel-flow" id="panelFlow"></div>
+    <div class="panel-meta" id="panelMeta"></div>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+</aside>
+
+<script>
+(function(){
+const NS='http://www.w3.org/2000/svg';
+const DATA={"DIST": {"พระนคร": {"c65": "ศศิธร ประสิทธิ์พรอุดม", "p65": "ก้าวไกล", "v65": 5703, "c69": "อดิเจขภ์ ประยูรพฤกษ์", "p69": "ประชาชน", "v69": 4074}, "ดุสิต": {"c65": "ศิริพงษ์ ลิมปิชัย", "p65": "เพื่อไทย", "v65": 9416, "c69": "อัครชัย กันธมาลา", "p69": "ประชาชน", "v69": 6841}, "หนองจอก": {"c65": "ณรงค์ รัสมี", "p65": "พลังประชารัฐ", "v65": 26542, "c69": "หยกพรชัย อิสระเสรีพงษ์", "p69": "ประชาชน", "v69": 26597}, "บางรัก": {"c65": "วิพุธ ศรีวะอุไร", "p65": "เพื่อไทย", "v65": 3480, "c69": "วิพุธ ศรีวะอุไร", "p69": "กลุ่มคนทำงาน", "v69": 6644}, "บางเขน": {"c65": "นริสสร แสงแก้ว", "p65": "อิสระ (กลุ่มรักษ์กรุงเทพ)", "v65": 24213, "c69": "นริสสร แสงแก้ว", "p69": "อิสระ", "v69": 41592}, "บางกะปิ": {"c65": "นภัสสร พละระวีพงษ์", "p65": "เพื่อไทย", "v65": 16428, "c69": "พงศกร รัตนเรืองวัฒนา", "p69": "กลุ่มคนทำงาน", "v69": 17882}, "ปทุมวัน": {"c65": "เมธาวี ธารดำรงค์", "p65": "อิสระ (กลุ่มรักษ์กรุงเทพ)", "v65": 3685, "c69": "เมธาวี ธารดำรงค์", "p69": "กลุ่ม Better Bangkok", "v69": 4606}, "ป้อมปราบศัตรูพ่าย": {"c65": "นิภาพรรณ จิ้งเลิศศิริ", "p65": "ประชาธิปัตย์", "v65": 5690, "c69": "นิภาพรรณ จิ้งเลิศศิริ", "p69": "ประชาธิปัตย์", "v69": 7078}, "พระโขนง": {"c65": "สราวุธ อนันต์ชล", "p65": "ก้าวไกล", "v65": 9336, "c69": "สราวุธ อนันต์ชล", "p69": "ประชาชน", "v69": 12953}, "มีนบุรี": {"c65": "วิริตน์ มีนชัยนันท์", "p65": "เพื่อไทย", "v65": 24658, "c69": "วิริตน์ มีนชัยนันท์", "p69": "เพื่อไทย Life ลงตัว", "v69": 17908}, "ลาดกระบัง": {"c65": "สุรจิตต์ พงษ์สิงห์วิทยา", "p65": "เพื่อไทย", "v65": 38130, "c69": "สุรจิตต์ พงษ์สิงห์วิทยา", "p69": "กลุ่ม Better Bangkok", "v69": 28873}, "ยานนาวา": {"c65": "พุทธิพัชร์ ธันยาธรรมนนท์", "p65": "ก้าวไกล", "v65": 8106, "c69": "ภัทรศักดิ์ ใหม่พระเนตร", "p69": "ประชาชน", "v69": 7963}, "สัมพันธวงศ์": {"c65": "พินิจ กาญจนชูศักดิ์", "p65": "ประชาธิปัตย์", "v65": 4613, "c69": "พินิจ กาญจนชูศักดิ์", "p69": "ประชาธิปัตย์", "v69": 4485}, "พญาไท": {"c65": "พีรพล กนกวลัย", "p65": "ก้าวไกล", "v65": 8585, "c69": "วรวิทย์ ฉายสุวรรณ์", "p69": "ประชาชน", "v69": 8789}, "ธนบุรี": {"c65": "จิรเสกข์ วัฒนมงคล", "p65": "เพื่อไทย", "v65": 16597, "c69": "จิรเสกข์ วัฒนมงคล", "p69": "กลุ่มคนทำงาน", "v69": 15927}, "บางกอกใหญ่": {"c65": "วิรัช คงคาเขตร", "p65": "ประชาธิปัตย์", "v65": 9329, "c69": "วิรัช คงคาเขตร", "p69": "ประชาธิปัตย์", "v69": 11713}, "ห้วยขวาง": {"c65": "ประพฤทธ์ หาญกิจจะกุล", "p65": "เพื่อไทย", "v65": 11120, "c69": "ปกาวิน ติณณ์พิพัฒน์โสกณ", "p69": "ประชาชน", "v69": 11960}, "คลองสาน": {"c65": "สมชาย เต็มไพบูลย์กุล", "p65": "ประชาธิปัตย์", "v65": 7703, "c69": "สมชาย เต็มไพบูลย์กุล", "p69": "ประชาธิปัตย์", "v69": 8918}, "ตลิ่งชัน": {"c65": "ลักขณา ภักดีนุนาก", "p65": "ก้าวไกล", "v65": 13667, "c69": "กันตพงศ์ ดีชัยยะ", "p69": "ประชาชน", "v69": 17986}, "บางกอกน้อย": {"c65": "นภาพล จีระกุล", "p65": "ประชาธิปัตย์", "v65": 14573, "c69": "นภาพล จีระกุล", "p69": "ประชาธิปัตย์", "v69": 14976}, "บางขุนเทียน": {"c65": "สารัช ม่วงศิริ", "p65": "ประชาธิปัตย์", "v65": 34158, "c69": "สารัช ม่วงศิริ", "p69": "กลุ่มคนทำงาน", "v69": 38893}, "ภาษีเจริญ": {"c65": "กฤษฏ์ คงวุฒิปัญญา", "p65": "เพื่อไทย", "v65": 21814, "c69": "กฤษฏ์ คงวุฒิปัญญา", "p69": "กลุ่มคนทำงาน", "v69": 21520}, "หนองแขม": {"c65": "นวรัตน์ อยู่บำรุง", "p65": "เพื่อไทย", "v65": 29996, "c69": "นวรัตน์ อยู่บำรุง", "p69": "อิสระ", "v69": 24955}, "ราษฎร์บูรณะ": {"c65": "ไสว โชติกะสุภา", "p65": "ไทยสร้างไทย", "v65": 9195, "c69": "ปิยวัช รังผึ้ง", "p69": "ประชาชน", "v69": 8473}, "บางพลัด": {"c65": "ภิญโญ ป้อมสถิตย์", "p65": "ประชาธิปัตย์", "v65": 12575, "c69": "ภิญโญ ป้อมสถิตย์", "p69": "อิสระ", "v69": 15948}, "ดินแดง": {"c65": "อนงค์ เพชรทัต", "p65": "พลังประชารัฐ", "v65": 14615, "c69": "อัมรินทร์ สวัสยานุกาพ", "p69": "ประชาชน", "v69": 12259}, "บึงกุ่ม": {"c65": "เนติภูมิ มิ่งรุจิราลัย", "p65": "เพื่อไทย", "v65": 20993, "c69": "เนติภูมิ มิ่งรุจิราลัย", "p69": "กลุ่มคนทำงาน", "v69": 22187}, "สาทร": {"c65": "อานุกาพ ธารทอง", "p65": "ก้าวไกล", "v65": 8335, "c69": "ว่าที่ ร้อยตรีไชราม ประกายกิจ", "p69": "ประชาชน", "v69": 7223}, "บางซื่อ": {"c65": "ภัทราภรณ์ เก่งรุ่งเรืองชัย", "p65": "ก้าวไกล", "v65": 19103, "c69": "ภัทราภรณ์ เก่งรุ่งเรืองชัย", "p69": "ประชาชน", "v69": 19904}, "จตุจักร": {"c65": "อภิวัฒน์ ด่านศรีชาญชัย", "p65": "ก้าวไกล", "v65": 22356, "c69": "อภิวัฒน์ ด่านศรีชาญชัย", "p69": "ประชาชน", "v69": 29082}, "บางคอแหลม": {"c65": "ปวิน แพทยานนท์", "p65": "เพื่อไทย", "v65": 9045, "c69": "ปวิน แพทยานนท์", "p69": "กลุ่มคนทำงาน", "v69": 8886}, "ประเวศ": {"c65": "ธนวัฒน์ เชิดชูกิจกุล", "p65": "ประชาธิปัตย์", "v65": 22971, "c69": "ธนวัฒน์ เชิดชูกิจกุล", "p69": "ประชาธิปัตย์", "v69": 28836}, "คลองเตย": {"c65": "สุชัย พงษ์เพียรชอบ", "p65": "อิสระ (กลุ่มรักษ์กรุงเทพ)", "v65": 13871, "c69": "สุชัย พงษ์เพียรชอบ", "p69": "ประชาธิปัตย์", "v69": 17594}, "สวนหลวง": {"c65": "ปิยวรรณ จระกา", "p65": "เพื่อไทย", "v65": 13491, "c69": "ปิยวรรณ จระกา", "p69": "กลุ่มคนทำงาน", "v69": 16819}, "จอมทอง": {"c65": "สุทธิชัย วีรกุลสุนทร", "p65": "เพื่อไทย", "v65": 28443, "c69": "สุทธิชัย วีรกุลสุนทร", "p69": "เพื่อไทย Life ลงตัว", "v69": 22683}, "ดอนเมือง": {"c65": "กนกนุช กลิ่นสังข์", "p65": "เพื่อไทย", "v65": 21238, "c69": "อดิศร ฤกษ์ลักษณี", "p69": "ประชาชน", "v69": 18522}, "ราชเทวี": {"c65": "เอกกวิน โชคประสพรวย", "p65": "ก้าวไกล", "v65": 7107, "c69": "เอกกวิน โชคประสพรวย", "p69": "ประชาชน", "v69": 7557}, "ลาดพร้าว": {"c65": "ณกัค เพ็งสุข", "p65": "ก้าวไกล", "v65": 15222, "c69": "รัชญา เพ็งสุข", "p69": "ประชาชน", "v69": 21570}, "วัฒนา": {"c65": "สัณห์สิทธิ์ เนาถาวร", "p65": "ก้าวไกล", "v65": 8819, "c69": "ภัคณดา อำนวยเดชกร", "p69": "ประชาชน", "v69": 7966}, "บางแค": {"c65": "อำนาจ ปานเผือก", "p65": "ก้าวไกล", "v65": 19809, "c69": "อำนาจ ปานเผือก", "p69": "ประชาชน", "v69": 28754}, "หลักสี่": {"c65": "ตกานต์ สุนนทวุฒิ", "p65": "เพื่อไทย", "v65": 15101, "c69": "ณพวิทย์ วงศ์อารีย์", "p69": "ประชาชน", "v69": 12354}, "สายไหม": {"c65": "รัตติกาล แก้วเกิดมี", "p65": "ไทยสร้างไทย", "v65": 44507, "c69": "สมชาย เวสารัชตระกูล", "p69": "เพื่อไทย Life ลงตัว", "v69": 28959}, "คันนายาว": {"c65": "ชญาดา วิภัติภูมิประเทศ", "p65": "เพื่อไทย", "v65": 18443, "c69": "ชญาดา วิภัติภูมิประเทศ", "p69": "กลุ่มคนทำงาน", "v69": 18801}, "สะพานสูง": {"c65": "มธุรส เบนท์", "p65": "เพื่อไทย", "v65": 14715, "c69": "มธุรส เบนท์", "p69": "กลุ่มคนทำงาน", "v69": 14566}, "วังทองหลาง": {"c65": "อนุรักษ์ เลิศวัฒนาไพบูลย์", "p65": "เพื่อไทย", "v65": 9381, "c69": "อนุรักษ์ เลิศวัฒนาไพบูลย์", "p69": "ประชาธิปัตย์", "v69": 17611}, "คลองสามวา": {"c65": "นฤนันมนต์ ห่วงทรัพย์", "p65": "เพื่อไทย", "v65": 29867, "c69": "สุรเกียรติ หวังพิทักษ์", "p69": "ประชาชน", "v69": 30281}, "บางนา": {"c65": "ฉัตรชัย หมอดี", "p65": "ก้าวไกล", "v65": 8827, "c69": "ฉัตรชัย หมอดี", "p69": "ประชาชน", "v69": 13275}, "ทวีวัฒนา": {"c65": "ยิ่งยงค์ จิตเพียรธรรม", "p65": "ก้าวไกล", "v65": 7827, "c69": "ณัฐนนท์ นาคหล่อ", "p69": "ประชาชน", "v69": 9486}, "ทุ่งครุ": {"c65": "กิตติพงศ์ รวยฟูพินส์", "p65": "เพื่อไทย", "v65": 25931, "c69": "กิตติพงศ์ รวยฟูพินส์", "p69": "เพื่อไทย Life ลงตัว", "v69": 36094}, "บางบอน": {"c65": "ณรงค์ศักดิ์ ม่วงศิริ", "p65": "ประชาธิปัตย์", "v65": 11610, "c69": "ณรงค์ศักดิ์ ม่วงศิริ", "p69": "กลุ่มคนทำงาน", "v69": 14210}}, "G2FLOWS": [{"from": "pt", "to": "workers", "v": 8, "people": [{"district": "บางรัก", "name": "วิพุธ ศรีวะอุไร", "v65": 3480, "v69": 6644}, {"district": "ธนบุรี", "name": "จิรเสกข์ วัฒนมงคล", "v65": 16597, "v69": 15927}, {"district": "ภาษีเจริญ", "name": "กฤษฏ์ คงวุฒิปัญญา", "v65": 21814, "v69": 21520}, {"district": "บึงกุ่ม", "name": "เนติภูมิ มิ่งรุจิราลัย", "v65": 20993, "v69": 22187}, {"district": "บางคอแหลม", "name": "ปวิน แพทยานนท์", "v65": 9045, "v69": 8886}, {"district": "สวนหลวง", "name": "ปิยวรรณ จระกา", "v65": 13491, "v69": 16819}, {"district": "คันนายาว", "name": "ชญาดา วิภัติภูมิประเทศ", "v65": 18443, "v69": 18801}, {"district": "สะพานสูง", "name": "มธุรส เบนท์", "v65": 14715, "v69": 14566}]}, {"from": "dp", "to": "dp69", "v": 6, "people": [{"district": "ป้อมปราบศัตรูพ่าย", "name": "นิภาพรรณ จิ้งเลิศศิริ", "v65": 5690, "v69": 7078}, {"district": "สัมพันธวงศ์", "name": "พินิจ กาญจนชูศักดิ์", "v65": 4613, "v69": 4485}, {"district": "บางกอกใหญ่", "name": "วิรัช คงคาเขตร", "v65": 9329, "v69": 11713}, {"district": "คลองสาน", "name": "สมชาย เต็มไพบูลย์กุล", "v65": 7703, "v69": 8918}, {"district": "บางกอกน้อย", "name": "นภาพล จีระกุล", "v65": 14573, "v69": 14976}, {"district": "ประเวศ", "name": "ธนวัฒน์ เชิดชูกิจกุล", "v65": 22971, "v69": 28836}]}, {"from": "kaokla", "to": "prachakon", "v": 6, "people": [{"district": "พระโขนง", "name": "สราวุธ อนันต์ชล", "v65": 9336, "v69": 12953}, {"district": "บางซื่อ", "name": "ภัทราภรณ์ เก่งรุ่งเรืองชัย", "v65": 19103, "v69": 19904}, {"district": "จตุจักร", "name": "อภิวัฒน์ ด่านศรีชาญชัย", "v65": 22356, "v69": 29082}, {"district": "ราชเทวี", "name": "เอกกวิน โชคประสพรวย", "v65": 7107, "v69": 7557}, {"district": "บางแค", "name": "อำนาจ ปานเผือก", "v65": 19809, "v69": 28754}, {"district": "บางนา", "name": "ฉัตรชัย หมอดี", "v65": 8827, "v69": 13275}]}, {"from": "pt", "to": "ptlife", "v": 3, "people": [{"district": "มีนบุรี", "name": "วิริตน์ มีนชัยนันท์", "v65": 24658, "v69": 17908}, {"district": "จอมทอง", "name": "สุทธิชัย วีรกุลสุนทร", "v65": 28443, "v69": 22683}, {"district": "ทุ่งครุ", "name": "กิตติพงศ์ รวยฟูพินส์", "v65": 25931, "v69": 36094}]}, {"from": "dp", "to": "workers", "v": 2, "people": [{"district": "บางขุนเทียน", "name": "สารัช ม่วงศิริ", "v65": 34158, "v69": 38893}, {"district": "บางบอน", "name": "ณรงค์ศักดิ์ ม่วงศิริ", "v65": 11610, "v69": 14210}]}, {"from": "ind65", "to": "ind69", "v": 1, "people": [{"district": "บางเขน", "name": "นริสสร แสงแก้ว", "v65": 24213, "v69": 41592}]}, {"from": "ind65", "to": "better", "v": 1, "people": [{"district": "ปทุมวัน", "name": "เมธาวี ธารดำรงค์", "v65": 3685, "v69": 4606}]}, {"from": "pt", "to": "better", "v": 1, "people": [{"district": "ลาดกระบัง", "name": "สุรจิตต์ พงษ์สิงห์วิทยา", "v65": 38130, "v69": 28873}]}, {"from": "pt", "to": "ind69", "v": 1, "people": [{"district": "หนองแขม", "name": "นวรัตน์ อยู่บำรุง", "v65": 29996, "v69": 24955}]}, {"from": "dp", "to": "ind69", "v": 1, "people": [{"district": "บางพลัด", "name": "ภิญโญ ป้อมสถิตย์", "v65": 12575, "v69": 15948}]}, {"from": "ind65", "to": "dp69", "v": 1, "people": [{"district": "คลองเตย", "name": "สุชัย พงษ์เพียรชอบ", "v65": 13871, "v69": 17594}]}, {"from": "pt", "to": "dp69", "v": 1, "people": [{"district": "วังทองหลาง", "name": "อนุรักษ์ เลิศวัฒนาไพบูลย์", "v65": 9381, "v69": 17611}]}]};
+const DIST=DATA.DIST, G2FLOWS=DATA.G2FLOWS;
+const ALIAS={'ป้อมปราบฯ':'ป้อมปราบศัตรูพ่าย'};
+const dget=n=>DIST[n]||DIST[ALIAS[n]]||null;
+
+/* ---------- Graph 1: SEAT (district reallocation) ---------- */
+const S_P65=[
+  {id:'kaokla', label:'ก้าวไกล',      color:'#FF6700', count:14},
+  {id:'pt',     label:'เพื่อไทย',      color:'#E53935', count:20},
+  {id:'dp',     label:'ประชาธิปัตย์',  color:'#1976D2', count:9},
+  {id:'ind65',  label:'อิสระ',         color:'#B45309', count:3, sub:'(รักษ์กรุงเทพ)'},
+  {id:'thai65', label:'ไทยสร้างไทย',  color:'#7C3AED', count:2},
+  {id:'pprp',   label:'พลังประชารัฐ', color:'#1E40AF', count:2},
+];
+const S_P69=[
+  {id:'prachakon', label:'ประชาชน',        color:'#FF6700', count:22},
+  {id:'workers',   label:'กลุ่มคนทำงาน',  color:'#16A34A', count:11},
+  {id:'dp69',      label:'ประชาธิปัตย์',  color:'#1976D2', count:8},
+  {id:'ptlife',    label:'เพื่อไทย Life', color:'#E53935', count:4, sub:'ลงตัว'},
+  {id:'ind69',     label:'อิสระ',         color:'#B45309', count:3},
+  {id:'better',    label:'Better Bangkok',color:'#22C55E', count:2},
+];
+const S_FLOWS=[
+  {from:'kaokla', to:'prachakon', v:14, d:['พระนคร','พระโขนง','ยานนาวา','พญาไท','ตลิ่งชัน','สาทร','บางซื่อ','จตุจักร','ราชเทวี','ลาดพร้าว','วัฒนา','บางแค','บางนา','ทวีวัฒนา']},
+  {from:'pt', to:'workers',   v:9,  d:['บางรัก','บางกะปิ','ธนบุรี','ภาษีเจริญ','บึงกุ่ม','บางคอแหลม','สวนหลวง','คันนายาว','สะพานสูง']},
+  {from:'pt', to:'prachakon', v:5,  d:['ดุสิต','ห้วยขวาง','ดอนเมือง','หลักสี่','คลองสามวา']},
+  {from:'pt', to:'ptlife',    v:3,  d:['มีนบุรี','จอมทอง','ทุ่งครุ']},
+  {from:'pt', to:'ind69',     v:1,  d:['หนองแขม']},
+  {from:'pt', to:'better',    v:1,  d:['ลาดกระบัง']},
+  {from:'pt', to:'dp69',      v:1,  d:['วังทองหลาง']},
+  {from:'dp', to:'dp69',      v:6,  d:['ป้อมปราบฯ','สัมพันธวงศ์','บางกอกใหญ่','คลองสาน','บางกอกน้อย','ประเวศ']},
+  {from:'dp', to:'workers',   v:2,  d:['บางขุนเทียน','บางบอน']},
+  {from:'dp', to:'ind69',     v:1,  d:['บางพลัด']},
+  {from:'ind65', to:'ind69',  v:1,  d:['บางเขน']},
+  {from:'ind65', to:'better', v:1,  d:['ปทุมวัน']},
+  {from:'ind65', to:'dp69',   v:1,  d:['คลองเตย']},
+  {from:'thai65', to:'prachakon', v:1, d:['ราษฎร์บูรณะ']},
+  {from:'thai65', to:'ptlife',    v:1, d:['สายไหม']},
+  {from:'pprp', to:'prachakon',   v:2, d:['หนองจอก','ดินแดง']},
+];
+
+/* ---------- Graph 2: PERSON (incumbents who switched) ---------- */
+// node styles
+const PARTY_META={
+  pt:{label:'เพื่อไทย',color:'#E53935'},
+  dp:{label:'ประชาธิปัตย์',color:'#1976D2'},
+  kaokla:{label:'ก้าวไกล',color:'#FF6700'},
+  ind65:{label:'อิสระ',color:'#B45309',sub:'(รักษ์กรุงเทพ)'},
+  workers:{label:'กลุ่มคนทำงาน',color:'#16A34A'},
+  dp69:{label:'ประชาธิปัตย์',color:'#1976D2'},
+  prachakon:{label:'ประชาชน',color:'#FF6700'},
+  ptlife:{label:'เพื่อไทย Life',color:'#E53935',sub:'ลงตัว'},
+  ind69:{label:'อิสระ',color:'#B45309'},
+  better:{label:'Better Bangkok',color:'#22C55E'},
+};
+// pairs that are the SAME party across years (not a move): ปชป.=ปชป., ก้าวไกล=ประชาชน
+const SAME_PAIRS=[['dp','dp69'],['kaokla','prachakon']];
+const isSamePair=(a,b)=>SAME_PAIRS.some(p=>p.includes(a)&&p.includes(b));
+// keep only incumbents who genuinely changed party/group
+const MOVERS=G2FLOWS.filter(f=>!isSamePair(f.from,f.to));
+function buildNodes(side){
+  const sum={};MOVERS.forEach(f=>{sum[f[side]]=(sum[f[side]]||0)+f.v;});
+  return Object.keys(sum).sort((a,b)=>sum[b]-sum[a]).map(id=>({id,...PARTY_META[id],count:sum[id]}));
+}
+const PR_P65=buildNodes('from');
+const PR_P69=buildNodes('to');
+
+/* ---------- shared rendering ---------- */
+function esc(s){return (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function fmt(n){return n==null?'–':Number(n).toLocaleString('en-US');}
+function canonParty(s){return (s==='ก้าวไกล'||s==='ประชาชน')?'__kkpc__':s;}
+function partyEq(a,b){return canonParty(a)===canonParty(b);}
+function voteTag(v65,v69){
+  if(v65==null||v69==null)return '';
+  const diff=v69-v65, pct=v65?Math.round(diff/v65*100):0, cls=diff>=0?'up':'down', s=diff>=0?'+':'';
+  return `<span class="tag ${cls}">${diff>=0?'▲':'▼'} ${s}${fmt(diff)} (${s}${pct}%)</span>`;
+}
+
+const CHROME={
+  dark:{bg:'#0e0e0e',axis:'#999',axisLine:'#444',nodeText:'#fff',foot:'#555'},
+  light:{bg:'#f6f6f8',axis:'#555',axisLine:'#bbb',nodeText:'#16161c',foot:'#aaa'}
+};
+let curTheme='dark', CH=CHROME.dark;
+
+function render(cfg){
+  const svg=document.getElementById(cfg.svgId);
+  const W=+svg.getAttribute('width'), H=+svg.getAttribute('height');
+  const NW=24,UNIT=10,GAP=15,LX=215,RX=740,TOP=58;
+  const mk=(tag,a,par)=>{const e=document.createElementNS(NS,tag);Object.entries(a||{}).forEach(([k,v])=>e.setAttribute(k,v));(par||svg).appendChild(e);return e;};
+  const txt=(x,y,s,a,par)=>{const t=mk('text',{x,y,...a},par);t.textContent=s;return t;};
+  const layout=(ps,x)=>{const m={};let y=TOP;ps.forEach(p=>{const h=p.count*UNIT;m[p.id]={...p,x,y,h};y+=h+GAP;});return m;};
+  const L=layout(cfg.P65,LX), R=layout(cfg.P69,RX);
+
+  mk('rect',{width:W,height:H,fill:CH.bg});
+  txt(LX+NW/2,TOP-22,'ปี 65',{'text-anchor':'middle',fill:CH.axis,'font-size':'18','font-family':'BKKDraft5, SaoChingcha, sans-serif','font-weight':'700'});
+  txt(RX+NW/2,TOP-22,'ปี 69',{'text-anchor':'middle',fill:CH.axis,'font-size':'18','font-family':'BKKDraft5, SaoChingcha, sans-serif','font-weight':'700'});
+  mk('line',{x1:LX-2,y1:TOP-15,x2:LX+NW+2,y2:TOP-15,stroke:CH.axisLine,'stroke-width':'1'});
+  mk('line',{x1:RX-2,y1:TOP-15,x2:RX+NW+2,y2:TOP-15,stroke:CH.axisLine,'stroke-width':'1'});
+
+  const LU={},RU={};cfg.P65.forEach(p=>LU[p.id]=0);cfg.P69.forEach(p=>RU[p.id]=0);
+  const fg=mk('g',{}), flows=[];
+  cfg.FLOWS.forEach(f=>{
+    const fn=L[f.from],tn=R[f.to];if(!fn||!tn)return;
+    const fh=f.v*UNIT;
+    const y1a=fn.y+LU[f.from], y1b=y1a+fh, y2a=tn.y+RU[f.to], y2b=y2a+fh;
+    LU[f.from]+=fh;RU[f.to]+=fh;
+    const x1=LX+NW,x2=RX,cp1=x1+(x2-x1)*0.45,cp2=x1+(x2-x1)*0.55;
+    const d=`M${x1},${y1a}C${cp1},${y1a} ${cp2},${y2a} ${x2},${y2a}L${x2},${y2b}C${cp2},${y2b} ${cp1},${y1b} ${x1},${y1b}Z`;
+    const path=mk('path',{d,fill:fn.color,opacity:'0.48',cursor:'pointer'},fg);
+    flows.push({path,f,fn,tn});
+  });
+
+  const tt=document.getElementById('tt');
+  flows.forEach(({path,f,fn,tn})=>{
+    const fromL=cfg.P65.find(p=>p.id===f.from).label, toL=cfg.P69.find(p=>p.id===f.to).label;
+    const unit=cfg.mode==='seat'?'เขต':'คน';
+    const names=cfg.mode==='seat'?f.d:f.people.map(p=>p.name);
+    path.addEventListener('mouseenter',function(){
+      flows.forEach(o=>o.path.setAttribute('opacity','0.08'));
+      this.setAttribute('opacity','0.8');
+      tt.innerHTML=`<b style="color:${fn.color}">${esc(fromL)}</b><span style="color:#555"> → </span><b style="color:${tn.color}">${esc(toL)}</b><br><span style="color:#777;font-size:11px">${f.v} ${unit} · คลิกเพื่อดูรายละเอียด</span><br><span style="color:#555;font-size:11.5px;line-height:1.6">${esc(names.join(' · '))}</span>`;
+      tt.style.opacity='1';
+    });
+    path.addEventListener('mousemove',e=>{tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-12)+'px';});
+    path.addEventListener('mouseleave',function(){flows.forEach(o=>o.path.setAttribute('opacity','0.48'));tt.style.opacity='0';});
+    path.addEventListener('click',e=>{e.stopPropagation();tt.style.opacity='0';openPanel(cfg.mode,f,fn,tn,fromL,toL);});
+  });
+
+  function drawNode(n,isLeft){
+    mk('rect',{x:n.x,y:n.y,width:NW,height:Math.max(n.h,4),fill:n.color,rx:4});
+    const my=n.y+n.h/2, hasSub=!!n.sub, mainY=hasSub?my-9:my;
+    const tx=isLeft?n.x-11:n.x+NW+11, anc=isLeft?'end':'start';
+    txt(tx,mainY,n.label,{'text-anchor':anc,'dominant-baseline':'middle','font-size':'13.5',fill:CH.nodeText,'font-family':'SaoChingcha, sans-serif','font-weight':'700'});
+    if(hasSub)txt(tx,my+10,n.sub,{'text-anchor':anc,'dominant-baseline':'middle','font-size':'11',fill:n.color,'font-family':'SaoChingcha, sans-serif'});
+    const cx=isLeft?n.x+NW+7:n.x-7, canc=isLeft?'start':'end';
+    txt(cx,my,`${n.count}`,{'text-anchor':canc,'dominant-baseline':'middle','font-size':'11',fill:n.color,'font-family':'SaoChingcha, sans-serif','font-weight':'700'});
+  }
+  cfg.P65.forEach(p=>drawNode(L[p.id],true));
+  cfg.P69.forEach(p=>drawNode(R[p.id],false));
+  txt(W/2,H-12,'hover ดูรายชื่อ · คลิกที่เส้นเพื่อดูรายละเอียด',{'text-anchor':'middle',fill:CH.foot,'font-size':'11','font-family':'SaoChingcha, sans-serif'});
+}
+
+/* ---------- panel ---------- */
+const panel=document.getElementById('panel'),scrim=document.getElementById('scrim');
+const pKind=document.getElementById('panelKind'),pFlow=document.getElementById('panelFlow'),pMeta=document.getElementById('panelMeta'),pBody=document.getElementById('panelBody');
+
+function openPanel(mode,f,fn,tn,fromL,toL){
+  pFlow.innerHTML=`<span style="color:${fn.color}">${esc(fromL)}</span><span class="arr">→</span><span style="color:${tn.color}">${esc(toL)}</span>`;
+  let cards='';
+  if(mode==='seat'){
+    pKind.textContent='เขตเปลี่ยนมือ · เทียบรายเขต';
+    let same=0,nw=0;
+    cards=f.d.map(name=>{
+      const r=dget(name);
+      if(!r)return `<div class="dcard"><div class="dname">${esc(name)}</div><div class="legend-note">ไม่พบข้อมูล</div></div>`;
+      const ps=r.c65&&r.c69&&r.c65===r.c69; ps?same++:nw++;
+      const pty=partyEq(r.p65,r.p69);
+      return `<div class="dcard"><div class="dname">${esc(name)}</div>
+        <div class="drow"><span class="dyr">65</span><span class="dparty" style="color:${fn.color}">${esc(r.p65)}</span><span class="dperson">${esc(r.c65)}</span><span class="dvotes">${fmt(r.v65)}</span></div>
+        <div class="drow"><span class="dyr">69</span><span class="dparty" style="color:${tn.color}">${esc(r.p69)}</span><span class="dperson">${esc(r.c69)}</span><span class="dvotes">${fmt(r.v69)}</span></div>
+        <div class="tags"><span class="tag ${ps?'same':'diff'}">${ps?'คนเดิม':'คนใหม่'}</span><span class="tag ${pty?'same':'diff'}">${pty?'พรรค/กลุ่มเดิม':'เปลี่ยนพรรค/กลุ่ม'}</span>${voteTag(r.v65,r.v69)}</div></div>`;
+    }).join('');
+    pMeta.innerHTML=`<span>${f.v} เขต</span><span style="color:#46d27e">คนเดิม ${same}</span><span style="color:#ff8a3d">คนใหม่ ${nw}</span>`;
+    pBody.innerHTML=`<div class="legend-note">แต่ละเขต: พรรค/กลุ่ม · ชื่อผู้ชนะ · คะแนน — ป้ายบอกว่าเป็นคนเดิมหรือคนใหม่</div>`+cards;
+  } else {
+    pKind.textContent='คนเดิมย้ายพรรค · รายคน';
+    const samePty=isSamePair(f.from,f.to);
+    cards=f.people.map(p=>`<div class="dcard"><div class="dname">${esc(p.name)} <span class="dist">เขต${esc(p.district)}</span></div>
+        <div class="drow"><span class="dyr">65</span><span class="dparty" style="color:${fn.color}">${esc(fromL)}</span><span class="dvotes">${fmt(p.v65)}</span></div>
+        <div class="drow"><span class="dyr">69</span><span class="dparty" style="color:${tn.color}">${esc(toL)}</span><span class="dvotes">${fmt(p.v69)}</span></div>
+        <div class="tags"><span class="tag ${samePty?'same':'diff'}">${samePty?'พรรค/กลุ่มเดิม':'เปลี่ยนพรรค/กลุ่ม'}</span>${voteTag(p.v65,p.v69)}</div></div>`).join('');
+    pMeta.innerHTML=`<span>${f.v} คน</span><span style="color:${samePty?'#46d27e':'#ff8a3d'}">${samePty?'อยู่ที่เดิม':'ย้ายพรรค/กลุ่ม'}</span>`;
+    pBody.innerHTML=`<div class="legend-note">คนเดียวกันที่ชนะทั้งสองปี — เทียบคะแนน ปี 65 → ปี 69</div>`+cards;
+  }
+  panel.classList.add('open');scrim.classList.add('open');
+}
+function closePanel(){panel.classList.remove('open');scrim.classList.remove('open');}
+document.getElementById('panelClose').addEventListener('click',closePanel);
+scrim.addEventListener('click',closePanel);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel();});
+
+function renderAll(){
+  ['chartSeat','chartPerson'].forEach(id=>{document.getElementById(id).innerHTML='';});
+  render({svgId:'chartSeat',  P65:S_P65, P69:S_P69, FLOWS:S_FLOWS, mode:'seat'});
+  render({svgId:'chartPerson',P65:PR_P65,P69:PR_P69,FLOWS:MOVERS, mode:'person'});
+}
+const tBtn=document.getElementById('themeToggle');
+function applyTheme(t){
+  curTheme=t; CH=CHROME[t];
+  document.documentElement.setAttribute('data-theme',t);
+  tBtn.textContent = t==='dark' ? '☀' : '☾';
+  try{localStorage.setItem('bkk-theme',t);}catch(e){}
+  renderAll();
+}
+let initT='dark';
+try{
+  const s=localStorage.getItem('bkk-theme');
+  initT = s || (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light':'dark');
+}catch(e){}
+applyTheme(initT);
+tBtn.addEventListener('click',()=>applyTheme(curTheme==='dark'?'light':'dark'));
+
+})();
+</script>
 </body>
 </html>
