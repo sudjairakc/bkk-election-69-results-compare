@@ -106,8 +106,8 @@ svg{display:block;margin:0 auto}
 
 <div class="section">
   <div class="sec-head">
-    <h2>② คนเดิมย้ายพรรค — มองที่ “คน”</h2>
-    <p class="note">หน่วย = <b>คน</b> · เฉพาะ “คนเดิม” (ผู้ชนะคนเดียวกันทั้งสองปี) ที่<b>ย้ายพรรค/กลุ่มจริง</b> — 20 คน<br>คนเดิมที่อยู่พรรคเดิม และเขตที่ได้คนใหม่ ไม่อยู่ในกราฟนี้ · คลิกดูรายชื่อ</p>
+    <h2>② คนเดิม — มองที่ “คน”</h2>
+    <p class="note">หน่วย = <b>คน</b> · เฉพาะ “คนเดิม” (ผู้ชนะคนเดียวกันทั้งสองปี) 20 คน<br>เส้นแสดงว่าแต่ละคนไปสังกัดพรรค/กลุ่มใดในปี 69 — เส้นที่ข้ามพรรคคือ<b>ย้ายจริง</b> · เขตที่ได้คนใหม่ไม่อยู่ในกราฟนี้ · คลิกดูรายชื่อ</p>
   </div>
   <svg id="chartPerson" width="980" height="540"></svg>
 </div>
@@ -202,7 +202,11 @@ const PR_P69=buildNodes('to');
 /* ---------- shared rendering ---------- */
 function esc(s){return (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function fmt(n){return n==null?'–':Number(n).toLocaleString('en-US');}
-function canonParty(s){return (s==='ก้าวไกล'||s==='ประชาชน')?'__kkpc__':s;}
+function canonParty(s){
+  if(s==='ก้าวไกล'||s==='ประชาชน')return '__kkpc__';
+  if(s&&s.indexOf('เพื่อไทย')===0)return '__pt__';
+  return s;
+}
 function partyEq(a,b){return canonParty(a)===canonParty(b);}
 function voteTag(v65,v69){
   if(v65==null||v69==null)return '';
@@ -297,8 +301,8 @@ function openPanel(mode,f,fn,tn,fromL,toL){
     pMeta.innerHTML=`<span>${f.v} เขต</span><span style="color:#46d27e">คนเดิม ${same}</span><span style="color:#ff8a3d">คนใหม่ ${nw}</span>`;
     pBody.innerHTML=`<div class="legend-note">แต่ละเขต: พรรค/กลุ่ม · ชื่อผู้ชนะ · คะแนน — ป้ายบอกว่าเป็นคนเดิมหรือคนใหม่</div>`+cards;
   } else {
-    pKind.textContent='คนเดิมย้ายพรรค · รายคน';
-    const samePty=isSamePair(f.from,f.to);
+    pKind.textContent='คนเดิม · รายคน';
+    const samePty=partyEq(fromL,toL);
     cards=f.people.map(p=>`<div class="dcard"><div class="dname">${esc(p.name)} <span class="dist">เขต${esc(p.district)}</span></div>
         <div class="drow"><span class="dyr">65</span><span class="dparty" style="color:${fn.color}">${esc(fromL)}</span><span class="dvotes">${fmt(p.v65)}</span></div>
         <div class="drow"><span class="dyr">69</span><span class="dparty" style="color:${tn.color}">${esc(toL)}</span><span class="dvotes">${fmt(p.v69)}</span></div>
