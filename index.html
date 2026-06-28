@@ -149,6 +149,29 @@ table.dtbl tr:hover td{background:var(--card-bg)}
 .legend{display:flex;gap:9px 16px;flex-wrap:wrap;justify-content:center;max-width:920px;margin:20px auto 0;padding:0 20px}
 .legend .li{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--note)}
 .legend .sw{width:12px;height:12px;border-radius:3px;flex:0 0 auto}
+
+/* person vs party 2x2 */
+.pp-wrap{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;align-items:flex-start;max-width:1000px;margin:0 auto;padding:0 20px}
+.ppgrid{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;flex:1 1 430px;min-width:320px}
+.pp-col{display:flex;align-items:flex-end;justify-content:center;text-align:center;font-size:12px;font-weight:700;color:var(--note-b);padding-bottom:4px}
+.pp-row{display:flex;align-items:center;justify-content:flex-end;text-align:right;font-size:12px;font-weight:700;color:var(--note-b);padding-right:8px}
+.pp-cell{border-radius:12px;padding:15px 14px;border:1px solid var(--card-border);cursor:default;min-height:106px;display:flex;flex-direction:column;justify-content:center;gap:2px;transition:transform .12s}
+.pp-cell:hover{transform:translateY(-2px)}
+.pp-cell .num{font-size:30px;font-weight:700;line-height:1;font-family:'BKKDraft5','SaoChingcha',sans-serif}
+.pp-cell .pct{font-size:13px;font-weight:700}
+.pp-cell .lab{font-size:11px;margin-top:3px;color:var(--note)}
+.pp-cell.ss{background:rgba(46,158,91,.10)}
+.pp-cell.sd{background:rgba(255,103,0,.13);border-color:rgba(255,103,0,.35)}
+.pp-cell.ns{background:rgba(25,118,210,.13);border-color:rgba(25,118,210,.35)}
+.pp-cell.nd{background:rgba(229,57,53,.10)}
+.pp-side{flex:1 1 300px;min-width:280px;display:flex;flex-direction:column;gap:18px}
+.pp-stat-h{font-size:12.5px;font-weight:700;color:var(--note-b);margin-bottom:8px}
+.pp-split{display:flex;height:30px;border-radius:8px;overflow:hidden;font-size:11px;font-weight:700}
+.pp-split span{display:flex;align-items:center;justify-content:center;color:#fff;white-space:nowrap;min-width:0;padding:0 5px;overflow:hidden}
+.pp-cap{font-size:11px;color:var(--sub);margin-top:7px;line-height:1.6}
+.pp-key{border:1px solid var(--card-border);background:var(--card-bg);border-radius:12px;padding:16px}
+.pp-note{font-size:11.5px;color:var(--note);line-height:1.75;margin-top:11px}
+.pp-note b{color:var(--note-b)}
 </style>
 </head>
 <body>
@@ -161,6 +184,7 @@ table.dtbl tr:hover td{background:var(--card-bg)}
     <button class="navlink" data-target="sec4">④ ตาราง</button>
     <button class="navlink" data-target="sec5">⑤ ผังเขต</button>
     <button class="navlink" data-target="sec6">⑥ คะแนนรายเขต</button>
+    <button class="navlink" data-target="sec7">⑦ คน/พรรค</button>
   </div>
   <button id="themeToggle" class="nav-toggle" aria-label="สลับโหมดสว่าง/มืด" title="สลับโหมดสว่าง/มืด">☀</button>
 </nav>
@@ -227,6 +251,17 @@ table.dtbl tr:hover td{background:var(--card-bg)}
     <button class="ctrl-btn" data-sort="delta">ส่วนต่าง</button>
   </div>
   <svg id="chartDumbbell" width="980" height="1180"></svg>
+</div>
+
+<div class="section" id="sec7">
+  <div class="sec-head">
+    <h2>⑦ คนกรุงเทพเลือกที่ “คน” หรือ “พรรค”?</h2>
+    <p class="note">เทียบผู้ชนะปี 65 กับ 69 รายเขต แยกเป็น 4 กลุ่ม · <b>คนเดิม</b> = ผู้ชนะคนเดียวกัน · <b>พรรคเดิม</b> = กลุ่มพรรคเดียวกัน (ก้าวไกล=ประชาชน, เพื่อไทย=เพื่อไทย Life) · ชี้ที่ช่องเพื่อดูรายเขต</p>
+  </div>
+  <div class="pp-wrap">
+    <div class="ppgrid" id="ppMatrix"></div>
+    <div class="pp-side" id="ppSide"></div>
+  </div>
 </div>
 
 <footer class="page-foot">
@@ -657,9 +692,44 @@ document.querySelectorAll('.ctrl-btn[data-sort]').forEach(btn=>{
   });
 });
 
+/* ===================== ⑦ PERSON vs PARTY ===================== */
+function renderPersonParty(){
+  const Q={
+    ss:ROWS.filter(r=>r.samePerson&&r.sameParty),
+    sd:ROWS.filter(r=>r.samePerson&&!r.sameParty),
+    ns:ROWS.filter(r=>!r.samePerson&&r.sameParty),
+    nd:ROWS.filter(r=>!r.samePerson&&!r.sameParty)
+  };
+  const N=ROWS.length, pc=n=>Math.round(n/N*100);
+  const COL={ss:'#2e9e5b',sd:'#d4660a',ns:'#1976D2',nd:'#d23b37'};
+  const labs={ss:'คนเดิม · พรรคเดิม',sd:'คนเดิม · ย้ายพรรค',ns:'คนใหม่ · พรรคเดิม',nd:'คนใหม่ · เปลี่ยนพรรค'};
+  const cell=key=>{const list=Q[key],c=COL[key];
+    return `<div class="pp-cell ${key}" data-q="${key}"><div class="num" style="color:${c}">${list.length}</div><div class="pct" style="color:${c}">${pc(list.length)}%</div><div class="lab">${labs[key]}</div></div>`;};
+  document.getElementById('ppMatrix').innerHTML=
+    `<div></div><div class="pp-col">พรรค/กลุ่มเดิม</div><div class="pp-col">เปลี่ยนพรรค/กลุ่ม</div>
+     <div class="pp-row">คนเดิม</div>${cell('ss')}${cell('sd')}
+     <div class="pp-row">คนใหม่</div>${cell('ns')}${cell('nd')}`;
+  document.querySelectorAll('#ppMatrix .pp-cell').forEach(el=>{
+    const k=el.dataset.q, list=Q[k];
+    const html=`<b>${labs[k]}</b> · ${list.length} เขต<br><span style="color:#888;font-size:11.5px;line-height:1.7">${list.map(r=>esc(r.district)).join(' · ')||'–'}</span>`;
+    el.addEventListener('mouseenter',e=>{tt.innerHTML=html;tt.style.opacity='1';moveTip(e);});
+    el.addEventListener('mousemove',moveTip);
+    el.addEventListener('mouseleave',hideTip);
+  });
+  const same=Q.ss.length+Q.sd.length, nw=Q.ns.length+Q.nd.length;
+  const spt=Q.ss.length+Q.ns.length, dpt=Q.sd.length+Q.nd.length;
+  const person=Q.sd.length, party=Q.ns.length;
+  const split=(aL,aV,aC,bL,bV,bC)=>{const tot=aV+bV||1,aP=Math.round(aV/tot*100),bP=100-aP;
+    return `<div class="pp-split"><span style="width:${aP}%;background:${aC}">${aL} ${aP}%</span><span style="width:${bP}%;background:${bC}">${bL} ${bP}%</span></div>`;};
+  document.getElementById('ppSide').innerHTML=
+   `<div><div class="pp-stat-h">ผู้ชนะ — คนเดิม vs คนใหม่</div>${split('คนเดิม',same,'#2e9e5b','คนใหม่',nw,'#9a9aa2')}<div class="pp-cap">คนเดิม ${same} เขต · คนใหม่ ${nw} เขต — ผู้ดำรงตำแหน่งเดิมกลับมาชนะ ${pc(same)}%</div></div>
+    <div><div class="pp-stat-h">พรรค/กลุ่ม — เดิม vs เปลี่ยน</div>${split('พรรคเดิม',spt,'#1976D2','เปลี่ยนพรรค',dpt,'#FF6700')}<div class="pp-cap">พรรค/กลุ่มเดิม ${spt} เขต · เปลี่ยน ${dpt} เขต</div></div>
+    <div class="pp-key"><div class="pp-stat-h">เมื่อที่นั่ง “ไม่เหมือนเดิม” — คนนำ หรือ พรรคนำ?</div>${split('เลือกที่คน',person,'#d4660a','เลือกที่พรรค',party,'#1976D2')}<div class="pp-note"><b style="color:#d4660a">เลือกที่คน</b> = คนเดิมชนะแม้ย้ายพรรค <b>${person}</b> เขต · <b style="color:#1976D2">เลือกที่พรรค</b> = พรรคเดิมรักษาที่นั่งด้วยผู้สมัครใหม่ <b>${party}</b> เขต<br>สัญญาณ “ตัวบุคคล” มากกว่า “พรรค” ราว ${(person/Math.max(party,1)).toFixed(1)} เท่า · (อีก ${Q.ss.length} เขตเหมือนเดิมทั้งคู่ และ ${Q.nd.length} เขตเปลี่ยนทั้งคู่ ตีความตรง ๆ ไม่ได้)</div></div>`;
+}
+
 /* ---- init + re-render on theme change ---- */
 function renderThemed(){renderBar();renderDumbbell();}
-renderThemed(); renderTable(); renderGrid();
+renderThemed(); renderTable(); renderGrid(); renderPersonParty();
 document.addEventListener('bkkthemechange',renderThemed);
 })();
 </script>
