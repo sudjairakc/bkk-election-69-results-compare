@@ -1,0 +1,16 @@
+# scratch / build data (embedded in HTML at build time, not needed at runtime)
+_data.json
+_data2.json
+dist_data.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editors
+.vscode/
+.idea/
+*.swp
+
+# logs
+*.log
