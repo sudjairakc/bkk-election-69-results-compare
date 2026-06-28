@@ -18,6 +18,7 @@
   --person:#ddd;--dvotes:#888;--dist:#888;--dyr:#666;--legend:#666;
   --btn-bg:rgba(255,255,255,.06);--btn-fg:#aaa;--btn-bg-h:rgba(255,255,255,.14);--btn-fg-h:#fff;
   --scrim:rgba(0,0,0,.35);
+  --nav-bg:rgba(14,14,14,.72);--nav-border:rgba(255,255,255,.08);--nav-fg:#9a9a9a;--nav-active-bg:rgba(255,255,255,.12);--nav-active-fg:#fff;
 }
 [data-theme="light"]{
   --bg:#f6f6f8;--fg:#16161c;--sub:#9a9aa2;--note:#5a5a63;--note-b:#1c1c22;--sec-border:#e5e5ea;
@@ -28,6 +29,7 @@
   --person:#33333a;--dvotes:#777;--dist:#888;--dyr:#999;--legend:#8a8a92;
   --btn-bg:rgba(0,0,0,.06);--btn-fg:#555;--btn-bg-h:rgba(0,0,0,.12);--btn-fg-h:#000;
   --scrim:rgba(0,0,0,.25);
+  --nav-bg:rgba(246,246,248,.8);--nav-border:rgba(0,0,0,.08);--nav-fg:#6a6a72;--nav-active-bg:rgba(0,0,0,.07);--nav-active-fg:#16161c;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:'SaoChingcha','Sarabun',sans-serif;min-height:100vh;transition:background .25s,color .25s}
@@ -36,6 +38,24 @@ body{background:var(--bg);color:var(--fg);font-family:'SaoChingcha','Sarabun',sa
   background:var(--btn-bg);color:var(--btn-fg);border-radius:10px;font-size:17px;cursor:pointer;line-height:1;
   display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
 .theme-toggle:hover{background:var(--btn-bg-h);color:var(--btn-fg-h)}
+
+/* ===== sticky navbar ===== */
+.topnav{position:sticky;top:0;z-index:500;display:flex;align-items:center;gap:10px;padding:9px 16px;
+  background:var(--nav-bg);border-bottom:1px solid var(--nav-border);
+  backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px)}
+.topnav .brand{font-family:'BKKDraft5','SaoChingcha',sans-serif;font-size:13px;letter-spacing:.03em;white-space:nowrap;
+  color:var(--fg);flex:0 0 auto;border:none;background:none;cursor:pointer;padding:4px 2px}
+.topnav .brand:hover{opacity:.7}
+.navlinks{position:relative;display:flex;gap:2px;overflow-x:auto;flex:1 1 auto;scrollbar-width:none;-ms-overflow-style:none}
+.navlinks::-webkit-scrollbar{display:none}
+.navlink{font-family:inherit;font-size:12px;color:var(--nav-fg);background:none;border:none;cursor:pointer;white-space:nowrap;
+  padding:6px 11px;border-radius:8px;line-height:1;transition:color .22s ease,background .22s ease}
+.navlink:hover{color:var(--fg);background:var(--btn-bg)}
+.navlink.active{color:var(--nav-active-fg);background:var(--nav-active-bg);font-weight:700}
+.nav-toggle{flex:0 0 auto;width:34px;height:34px;border:1px solid var(--panel-border);background:var(--btn-bg);color:var(--btn-fg);
+  border-radius:9px;font-size:16px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+.nav-toggle:hover{background:var(--btn-bg-h);color:var(--btn-fg-h)}
+.section{scroll-margin-top:62px}
 
 .page-head{text-align:center;padding:34px 40px 6px}
 .page-head h1{font-family:'BKKDraft5','SaoChingcha',sans-serif;font-size:25px;letter-spacing:.04em;margin-bottom:6px}
@@ -86,17 +106,71 @@ svg{display:block;margin:0 auto;max-width:100%}
 .legend-note{font-size:11px;color:var(--legend);padding:4px 4px 12px;line-height:1.6}
 .scrim{position:fixed;inset:0;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .26s;z-index:250}
 .scrim.open{opacity:1;pointer-events:auto}
+
+/* ===== added visualizations ===== */
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;margin:0 auto 14px;max-width:1000px;padding:0 20px}
+.ctrl-btn{font-family:inherit;font-size:12px;color:var(--btn-fg);background:var(--btn-bg);border:1px solid var(--panel-border);border-radius:8px;padding:6px 13px;cursor:pointer;transition:background .18s,color .18s}
+.ctrl-btn:hover{background:var(--btn-bg-h);color:var(--btn-fg-h)}
+.ctrl-btn.active{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.search-box{font-family:inherit;font-size:12.5px;color:var(--fg);background:var(--card-bg);border:1px solid var(--panel-border);border-radius:8px;padding:7px 14px;width:300px;max-width:84vw;outline:none}
+.search-box:focus{border-color:var(--fg)}
+.search-box::placeholder{color:var(--sub)}
+
+/* table */
+.tbl-scroll{max-width:1000px;margin:0 auto;padding:0 20px;overflow-x:auto}
+table.dtbl{border-collapse:collapse;width:100%;font-size:12.5px}
+table.dtbl th,table.dtbl td{padding:8px 11px;text-align:left;border-bottom:1px solid var(--sec-border);white-space:nowrap;vertical-align:top}
+table.dtbl th{position:sticky;top:0;background:var(--bg);cursor:pointer;font-weight:700;color:var(--note-b);user-select:none;font-size:11.5px;z-index:2}
+table.dtbl th .sa{color:var(--sub);font-size:10px;margin-left:3px}
+table.dtbl td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.dtbl tr:hover td{background:var(--card-bg)}
+.pdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.cand{color:var(--person);font-weight:700}
+.psub{font-size:10.5px;color:var(--sub);margin-top:2px}
+.delta-up{color:#2e9e5b}.delta-down{color:#d23b37}
+[data-theme="dark"] .delta-up{color:#46d27e}[data-theme="dark"] .delta-down{color:#ff6b67}
+.bdg{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700;margin:1px 4px 1px 0}
+.bdg.same{background:rgba(34,197,94,.13);color:#2e9e5b}
+.bdg.diff{background:rgba(255,103,0,.13);color:#d4660a}
+[data-theme="dark"] .bdg.same{color:#46d27e}[data-theme="dark"] .bdg.diff{color:#ff8a3d}
+.tbl-empty{text-align:center;color:var(--sub);padding:24px;font-size:12.5px}
+
+/* grid map */
+.gridmaps{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;max-width:1000px;margin:0 auto;padding:0 20px}
+.gridmap{flex:1 1 360px;min-width:300px}
+.gridmap h3{text-align:center;font-family:'BKKDraft5','SaoChingcha',sans-serif;font-size:15px;margin-bottom:11px;color:var(--note-b)}
+.tilegrid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.tile{border-radius:7px;padding:6px 6px;cursor:default;min-height:42px;display:flex;flex-direction:column;justify-content:center;line-height:1.2;transition:transform .12s}
+.tile:hover{transform:scale(1.07)}
+.tile .tn{font-size:11px;font-weight:700}
+.tile .tp{font-size:8.5px;opacity:.9;margin-top:1px}
+.tile.changed{outline:2px dashed rgba(255,255,255,.65);outline-offset:-3px}
+[data-theme="light"] .tile.changed{outline-color:rgba(0,0,0,.5)}
+.legend{display:flex;gap:9px 16px;flex-wrap:wrap;justify-content:center;max-width:920px;margin:20px auto 0;padding:0 20px}
+.legend .li{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--note)}
+.legend .sw{width:12px;height:12px;border-radius:3px;flex:0 0 auto}
 </style>
 </head>
 <body>
-<button id="themeToggle" class="theme-toggle" aria-label="สลับโหมดสว่าง/มืด" title="สลับโหมดสว่าง/มืด">☀</button>
+<nav class="topnav">
+  <button class="brand" id="navBrand" type="button">กทม. 65→69</button>
+  <div class="navlinks" id="navLinks">
+    <button class="navlink" data-target="sec1">① เขตเปลี่ยนมือ</button>
+    <button class="navlink" data-target="sec2">② คนเดิม</button>
+    <button class="navlink" data-target="sec3">③ ที่นั่ง/พรรค</button>
+    <button class="navlink" data-target="sec4">④ ตาราง</button>
+    <button class="navlink" data-target="sec5">⑤ ผังเขต</button>
+    <button class="navlink" data-target="sec6">⑥ คะแนนรายเขต</button>
+  </div>
+  <button id="themeToggle" class="nav-toggle" aria-label="สลับโหมดสว่าง/มืด" title="สลับโหมดสว่าง/มืด">☀</button>
+</nav>
 <div class="page-head">
   <h1 id="pageTitle"></h1>
   <p class="sub" id="pageSub"></p>
   <div class="count-pill" id="countPill"></div>
 </div>
 
-<div class="section">
+<div class="section" id="sec1">
   <div class="sec-head">
     <h2>① ที่นั่งเปลี่ยนมือ — มองที่ “เขต”</h2>
     <p class="note" id="noteSeat"></p>
@@ -104,12 +178,55 @@ svg{display:block;margin:0 auto;max-width:100%}
   <svg id="chartSeat" width="980" height="680"></svg>
 </div>
 
-<div class="section">
+<div class="section" id="sec2">
   <div class="sec-head">
     <h2>② คนเดิม — มองที่ “คน”</h2>
     <p class="note" id="notePerson"></p>
   </div>
   <svg id="chartPerson" width="980" height="540"></svg>
+</div>
+
+<div class="section" id="sec3">
+  <div class="sec-head">
+    <h2>③ จำนวนที่นั่งแต่ละพรรค/กลุ่ม — ปี 65 เทียบ 69</h2>
+    <p class="note">นับรวมตาม “กลุ่มพรรคเดียวกัน” (ก้าวไกล=ประชาชน, เพื่อไทย=เพื่อไทย Life) · หน่วย = เขต (จาก 50)<br>แท่ง<b>จาง</b> = ปี 65 · แท่ง<b>เข้ม</b> = ปี 69</p>
+  </div>
+  <svg id="chartBar" width="980" height="430"></svg>
+</div>
+
+<div class="section" id="sec4">
+  <div class="sec-head">
+    <h2>④ ตารางผลรายเขต — ค้นหา / เรียงลำดับได้</h2>
+    <p class="note">พิมพ์เพื่อค้นหาชื่อเขต ผู้สมัคร หรือพรรค · คลิกหัวคอลัมน์เพื่อเรียงลำดับ</p>
+  </div>
+  <div class="controls"><input id="tblSearch" class="search-box" type="text" placeholder="ค้นหา เขต / ผู้สมัคร / พรรค…"></div>
+  <div class="tbl-scroll"><table class="dtbl" id="dtbl"><thead></thead><tbody></tbody></table></div>
+</div>
+
+<div class="section" id="sec5">
+  <div class="sec-head">
+    <h2>⑤ ผังเขต ระบายสีตามพรรคผู้ชนะ</h2>
+    <p class="note">แต่ละช่อง = 1 เขต (เรียงตามรหัสเขต) · <b>กรอบประ</b> = เขตที่เปลี่ยนกลุ่มพรรคจาก 65 → 69 · ชี้เพื่อดูรายละเอียด</p>
+  </div>
+  <div class="gridmaps">
+    <div class="gridmap"><h3>ปี 65</h3><div class="tilegrid" id="grid65"></div></div>
+    <div class="gridmap"><h3>ปี 69</h3><div class="tilegrid" id="grid69"></div></div>
+  </div>
+  <div class="legend" id="gridLegend"></div>
+</div>
+
+<div class="section" id="sec6">
+  <div class="sec-head">
+    <h2>⑥ คะแนนผู้ชนะรายเขต 65 → 69</h2>
+    <p class="note">จุดซ้าย = คะแนนผู้ชนะปี 65 · จุดขวา = ปี 69 (สีจุด = พรรคของปีนั้น) · เส้น<b style="color:#2e9e5b">เขียว</b> = เพิ่มขึ้น, <b style="color:#d23b37">แดง</b> = ลดลง</p>
+  </div>
+  <div class="controls">
+    <span style="font-size:11.5px;color:var(--sub)">เรียงตาม:</span>
+    <button class="ctrl-btn active" data-sort="id">รหัสเขต</button>
+    <button class="ctrl-btn" data-sort="v69">คะแนนปี 69</button>
+    <button class="ctrl-btn" data-sort="delta">ส่วนต่าง</button>
+  </div>
+  <svg id="chartDumbbell" width="980" height="1180"></svg>
 </div>
 
 <footer class="page-foot">
@@ -340,6 +457,7 @@ function applyTheme(t){
   tBtn.textContent = t==='dark' ? '☀' : '☾';
   try{localStorage.setItem('bkk-theme',t);}catch(e){}
   renderAll();
+  document.dispatchEvent(new CustomEvent('bkkthemechange',{detail:t}));
 }
 let initT='dark';
 try{ const s=localStorage.getItem('bkk-theme');
@@ -348,6 +466,255 @@ try{ const s=localStorage.getItem('bkk-theme');
 applyTheme(initT);
 tBtn.addEventListener('click',()=>applyTheme(curTheme==='dark'?'light':'dark'));
 
+})();
+</script>
+
+<!-- ====== added visualizations: bar / table / grid / dumbbell ====== -->
+<script>
+(function(){
+const NS='http://www.w3.org/2000/svg';
+const E=window.ELECTION, META=E.meta, PARTIES=E.parties, y65=E.year65, y69=E.year69;
+
+function pinfo(n){return PARTIES[n]||{label:n,color:'#888',canon:n};}
+function canon(n){return pinfo(n).canon||n;}
+function partyEq(a,b){return canon(a)===canon(b);}
+function fmt(n){return n==null?'–':Number(n).toLocaleString('en-US');}
+function esc(s){return (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+/* ---- combined rows ---- */
+const by69={}; y69.forEach(r=>by69[r.district]=r);
+const ROWS=y65.map(r=>{const b=by69[r.district]||{};return{
+  id:r.district_id, district:r.district,
+  c65:r.candidate, p65:r.party, v65:r.votes,
+  c69:b.candidate, p69:b.party, v69:b.votes,
+  dv:(b.votes!=null&&r.votes!=null)?b.votes-r.votes:null,
+  samePerson:b.candidate!=null&&r.candidate===b.candidate,
+  sameParty:b.party!=null&&partyEq(r.party,b.party)
+};});
+
+/* ---- canon (merged party) meta + seat counts ---- */
+const CANON={};
+Object.values(PARTIES).forEach(info=>{const c=info.canon, lab=info.label+(info.sub?' '+info.sub:'');if(!CANON[c])CANON[c]={color:info.color,labels:[]};if(!CANON[c].labels.includes(lab))CANON[c].labels.push(lab);});
+const cl=c=>CANON[c]?CANON[c].labels.join(' / '):c;
+const cc=c=>CANON[c]?CANON[c].color:'#888';
+const cnt65={}, cnt69={};
+y65.forEach(r=>{const c=canon(r.party);cnt65[c]=(cnt65[c]||0)+1;});
+y69.forEach(r=>{const c=canon(r.party);cnt69[c]=(cnt69[c]||0)+1;});
+const CANONS=[...new Set([...Object.keys(cnt65),...Object.keys(cnt69)])]
+  .sort((a,b)=>Math.max(cnt69[b]||0,cnt65[b]||0)-Math.max(cnt69[a]||0,cnt65[a]||0)||cl(a).localeCompare(cl(b),'th'));
+
+/* ---- theme palette ---- */
+function isDark(){return (document.documentElement.getAttribute('data-theme')||'dark')==='dark';}
+function chrome(){const d=isDark();return{bg:d?'#0e0e0e':'#f6f6f8',fg:d?'#fff':'#16161c',axis:d?'#999':'#555',line:d?'#333':'#cfcfcf',sub:d?'#888':'#999',up:d?'#46d27e':'#2e9e5b',down:d?'#ff6b67':'#d23b37'};}
+
+/* ---- shared tooltip ---- */
+const tt=document.getElementById('tt');
+function tipHTML(r){return `<b>${esc(r.district)}</b><br>
+  <span style="color:${pinfo(r.p65).color}">65 · ${esc(r.p65)}</span> — ${esc(r.c65)} (${fmt(r.v65)})<br>
+  <span style="color:${r.p69?pinfo(r.p69).color:'#888'}">69 · ${esc(r.p69||'-')}</span> — ${esc(r.c69||'-')} (${fmt(r.v69)})`+
+  (r.dv!=null?`<br><span style="color:#888">Δ ${(r.dv>=0?'+':'')}${fmt(r.dv)}</span>`:'');}
+function showTip(e,r){tt.innerHTML=tipHTML(r);tt.style.opacity='1';moveTip(e);}
+function moveTip(e){tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-12)+'px';}
+function hideTip(){tt.style.opacity='0';}
+
+const svgHelpers=svg=>{
+  const mk=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;};
+  const txt=(x,y,s,a)=>{const t=mk('text',{x,y,...a});t.textContent=s;return t;};
+  return {mk,txt};
+};
+const FF='SaoChingcha, sans-serif';
+
+/* ===================== ③ BAR ===================== */
+function renderBar(){
+  const svg=document.getElementById('chartBar'); svg.innerHTML='';
+  const CH=chrome(), {mk,txt}=svgHelpers(svg);
+  const W=+svg.getAttribute('width');
+  const LX=180, RX=W-80, TOP=20, rowH=64, barH=19, gap=6;
+  const H=TOP+CANONS.length*rowH+16; svg.setAttribute('height',H);
+  mk('rect',{width:W,height:H,fill:CH.bg});
+  const max=Math.max(1,...CANONS.map(c=>Math.max(cnt65[c]||0,cnt69[c]||0)));
+  const scale=v=>(v/max)*(RX-LX);
+  CANONS.forEach((c,i)=>{
+    const yTop=TOP+i*rowH+8, color=cc(c), v5=cnt65[c]||0, v9=cnt69[c]||0, d=v9-v5;
+    txt(LX-14,yTop+barH+gap/2,cl(c),{'text-anchor':'end','dominant-baseline':'middle','font-size':'12.5',fill:CH.fg,'font-family':FF,'font-weight':'700'});
+    // 65
+    const w5=v5?Math.max(scale(v5),2):0;
+    mk('rect',{x:LX,y:yTop,width:w5,height:barH,fill:color,opacity:'0.38',rx:3});
+    txt(LX-6,yTop+barH/2,'65',{'text-anchor':'end','dominant-baseline':'middle','font-size':'9',fill:CH.sub,'font-family':FF});
+    txt(LX+w5+7,yTop+barH/2,String(v5),{'dominant-baseline':'middle','font-size':'11.5',fill:CH.sub,'font-family':FF,'font-weight':'700'});
+    // 69
+    const y2=yTop+barH+gap, w9=v9?Math.max(scale(v9),2):0;
+    mk('rect',{x:LX,y:y2,width:w9,height:barH,fill:color,rx:3});
+    txt(LX-6,y2+barH/2,'69',{'text-anchor':'end','dominant-baseline':'middle','font-size':'9',fill:CH.sub,'font-family':FF});
+    txt(LX+w9+7,y2+barH/2,String(v9),{'dominant-baseline':'middle','font-size':'11.5',fill:color,'font-family':FF,'font-weight':'700'});
+    if(d!==0)txt(LX+w9+7+String(v9).length*7+8,y2+barH/2,(d>0?'+':'')+d,{'dominant-baseline':'middle','font-size':'10.5',fill:d>0?CH.up:CH.down,'font-family':FF,'font-weight':'700'});
+  });
+}
+
+/* ===================== ④ TABLE ===================== */
+let sortKey='id', sortDir=1;
+const SORTABLE={district:'th',c65:'th',c69:'th',v65:'n',v69:'n',dv:'n',id:'n'};
+function renderTable(){
+  const thead=document.querySelector('#dtbl thead'), tbody=document.querySelector('#dtbl tbody');
+  const arrow=k=>sortKey===k?`<span class="sa">${sortDir>0?'▲':'▼'}</span>`:'';
+  thead.innerHTML=`<tr>
+    <th data-k="district">เขต${arrow('district')}</th>
+    <th data-k="c65">ผู้ชนะ 65${arrow('c65')}</th>
+    <th data-k="v65">คะแนน 65${arrow('v65')}</th>
+    <th data-k="c69">ผู้ชนะ 69${arrow('c69')}</th>
+    <th data-k="v69">คะแนน 69${arrow('v69')}</th>
+    <th data-k="dv">Δ คะแนน${arrow('dv')}</th>
+    <th>สถานะ</th></tr>`;
+  const q=(document.getElementById('tblSearch').value||'').trim().toLowerCase();
+  let data=ROWS.filter(r=>!q||[r.district,r.c65,r.p65,r.c69,r.p69].some(s=>(s||'').toLowerCase().includes(q)));
+  const typ=SORTABLE[sortKey]||'n';
+  data=data.slice().sort((a,b)=>{
+    let av=a[sortKey],bv=b[sortKey];
+    if(typ==='th')return String(av||'').localeCompare(String(bv||''),'th')*sortDir;
+    av=av==null?-Infinity:av; bv=bv==null?-Infinity:bv; return (av-bv)*sortDir;
+  });
+  if(!data.length){tbody.innerHTML=`<tr><td colspan="7" class="tbl-empty">ไม่พบผลที่ค้นหา</td></tr>`;return;}
+  tbody.innerHTML=data.map(r=>{
+    const dvCls=r.dv==null?'':(r.dv>=0?'delta-up':'delta-down');
+    const dvTxt=r.dv==null?'–':(r.dv>=0?'+':'')+fmt(r.dv);
+    return `<tr>
+      <td><b>${esc(r.district)}</b></td>
+      <td><span class="pdot" style="background:${pinfo(r.p65).color}"></span><span class="cand">${esc(r.c65)}</span><div class="psub">${esc(r.p65)}</div></td>
+      <td class="num">${fmt(r.v65)}</td>
+      <td>${r.c69?`<span class="pdot" style="background:${pinfo(r.p69).color}"></span><span class="cand">${esc(r.c69)}</span><div class="psub">${esc(r.p69)}</div>`:'–'}</td>
+      <td class="num">${fmt(r.v69)}</td>
+      <td class="num ${dvCls}">${dvTxt}</td>
+      <td><span class="bdg ${r.samePerson?'same':'diff'}">${r.samePerson?'คนเดิม':'คนใหม่'}</span><span class="bdg ${r.sameParty?'same':'diff'}">${r.sameParty?'พรรคเดิม':'เปลี่ยนพรรค'}</span></td>
+    </tr>`;
+  }).join('');
+}
+document.querySelector('#dtbl thead').addEventListener('click',e=>{
+  const th=e.target.closest('th'); if(!th||!th.dataset.k)return;
+  const k=th.dataset.k;
+  if(sortKey===k)sortDir=-sortDir; else {sortKey=k; sortDir=(SORTABLE[k]==='n')?-1:1;}
+  renderTable();
+});
+document.getElementById('tblSearch').addEventListener('input',renderTable);
+
+/* ===================== ⑤ GRID ===================== */
+function textOn(hex){const c=hex.replace('#','');const r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)>150?'#111':'#fff';}
+function tile(r,party,changed){
+  const color=party?pinfo(party).color:'#888', d=document.createElement('div');
+  d.className='tile'+(changed?' changed':''); d.style.background=color; d.style.color=textOn(color);
+  d.innerHTML=`<span class="tn">${esc(r.district)}</span><span class="tp">${esc(pinfo(party).label||party||'-')}</span>`;
+  d.addEventListener('mouseenter',e=>showTip(e,r));
+  d.addEventListener('mousemove',moveTip);
+  d.addEventListener('mouseleave',hideTip);
+  return d;
+}
+function renderGrid(){
+  const g65=document.getElementById('grid65'), g69=document.getElementById('grid69');
+  g65.innerHTML=''; g69.innerHTML='';
+  ROWS.slice().sort((a,b)=>a.id-b.id).forEach(r=>{
+    const changed=!r.sameParty;
+    g65.appendChild(tile(r,r.p65,changed));
+    g69.appendChild(tile(r,r.p69,changed));
+  });
+  document.getElementById('gridLegend').innerHTML=CANONS.map(c=>`<div class="li"><span class="sw" style="background:${cc(c)}"></span>${esc(cl(c))}</div>`).join('');
+}
+
+/* ===================== ⑥ DUMBBELL ===================== */
+let dbSort='id';
+function renderDumbbell(){
+  const svg=document.getElementById('chartDumbbell'); svg.innerHTML='';
+  const CH=chrome(), {mk,txt}=svgHelpers(svg);
+  const W=+svg.getAttribute('width');
+  let rows=ROWS.filter(r=>r.v65!=null&&r.v69!=null);
+  if(dbSort==='id')rows.sort((a,b)=>a.id-b.id);
+  else if(dbSort==='v69')rows.sort((a,b)=>b.v69-a.v69);
+  else rows.sort((a,b)=>b.dv-a.dv);
+  const LX=120, RX=W-95, TOP=34, rowH=22;
+  const H=TOP+rows.length*rowH+18; svg.setAttribute('height',H);
+  mk('rect',{width:W,height:H,fill:CH.bg});
+  const max=Math.max(1,...rows.map(r=>Math.max(r.v65,r.v69)));
+  const x=v=>LX+(v/max)*(RX-LX);
+  for(let g=0;g<=50000;g+=10000){ if(g>max)break; const gx=x(g);
+    mk('line',{x1:gx,y1:TOP-10,x2:gx,y2:H-14,stroke:CH.line,'stroke-width':'1','stroke-dasharray':'2 4'});
+    txt(gx,TOP-16,(g/1000)+'k',{'text-anchor':'middle','font-size':'9',fill:CH.sub,'font-family':FF});
+  }
+  rows.forEach((r,i)=>{
+    const y=TOP+i*rowH+rowH/2, x1=x(r.v65), x2=x(r.v69), up=r.dv>=0;
+    txt(LX-10,y,r.district,{'text-anchor':'end','dominant-baseline':'middle','font-size':'10.5',fill:CH.fg,'font-family':FF});
+    mk('line',{x1,y1:y,x2,y2:y,stroke:up?CH.up:CH.down,opacity:'0.5','stroke-width':'2.5'});
+    mk('circle',{cx:x1,cy:y,r:'4',fill:cc(canon(r.p65)),stroke:CH.bg,'stroke-width':'1.5'});
+    mk('circle',{cx:x2,cy:y,r:'4.5',fill:cc(canon(r.p69)),stroke:CH.bg,'stroke-width':'1.5'});
+    txt(RX+10,y,(up?'+':'')+fmt(r.dv),{'dominant-baseline':'middle','font-size':'9.5',fill:up?CH.up:CH.down,'font-family':FF,'font-weight':'700'});
+    const hit=mk('rect',{x:'0',y:y-rowH/2,width:W,height:rowH,fill:'transparent',cursor:'pointer'});
+    hit.addEventListener('mouseenter',e=>showTip(e,r));
+    hit.addEventListener('mousemove',moveTip);
+    hit.addEventListener('mouseleave',hideTip);
+  });
+}
+document.querySelectorAll('.ctrl-btn[data-sort]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.ctrl-btn[data-sort]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); dbSort=btn.dataset.sort; renderDumbbell();
+  });
+});
+
+/* ---- init + re-render on theme change ---- */
+function renderThemed(){renderBar();renderDumbbell();}
+renderThemed(); renderTable(); renderGrid();
+document.addEventListener('bkkthemechange',renderThemed);
+})();
+</script>
+
+<!-- ====== navbar: smooth scroll + scrollspy ====== -->
+<script>
+(function(){
+const nav=document.querySelector('.topnav');
+const cont=document.getElementById('navLinks');
+const links=[...document.querySelectorAll('.navlink')];
+const secs=links.map(l=>document.getElementById(l.dataset.target));
+const navH=()=>nav.offsetHeight;
+const ease=t=>t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+
+let raf=null;
+function smoothTo(y){
+  if(raf)cancelAnimationFrame(raf);
+  const start=window.scrollY, dist=Math.max(0,y)-start;
+  if(Math.abs(dist)<2){window.scrollTo(0,Math.max(0,y));return;}
+  const dur=Math.min(1100,Math.max(420,Math.abs(dist)*0.45)), t0=performance.now();
+  (function step(now){
+    const p=Math.min(1,(now-t0)/dur);
+    window.scrollTo(0,start+dist*ease(p));
+    if(p<1)raf=requestAnimationFrame(step);
+  })(performance.now());
+}
+function ensureVisible(l){
+  const target=l.offsetLeft-(cont.clientWidth-l.offsetWidth)/2;
+  if(cont.scrollTo)cont.scrollTo({left:target,behavior:'smooth'}); else cont.scrollLeft=target;
+}
+let activeEl=null;
+function setActive(l){
+  if(!l||l===activeEl)return; activeEl=l;
+  links.forEach(x=>x.classList.toggle('active',x===l));
+  ensureVisible(l);
+}
+links.forEach(l=>l.addEventListener('click',()=>{
+  const sec=document.getElementById(l.dataset.target); if(!sec)return;
+  setActive(l);
+  smoothTo(sec.getBoundingClientRect().top+window.scrollY-navH()-8);
+}));
+document.getElementById('navBrand').addEventListener('click',()=>smoothTo(0));
+
+let ticking=false;
+function spy(){
+  ticking=false;
+  const pos=window.scrollY+navH()+28;
+  let idx=0;
+  for(let i=0;i<secs.length;i++){ if(secs[i]&&secs[i].offsetTop<=pos)idx=i; }
+  if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)idx=secs.length-1;
+  setActive(links[idx]);
+}
+window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(spy);}},{passive:true});
+window.addEventListener('resize',spy);
+spy();
 })();
 </script>
 </body>
