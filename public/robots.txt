@@ -1,0 +1,5 @@
+# Allow all crawlers — including AI engines (GPTBot, PerplexityBot, ClaudeBot, etc.)
+User-agent: *
+Allow: /
+
+Sitemap: https://sudjairakc.github.io/bkk-election-69-results-compare/sitemap-index.xml

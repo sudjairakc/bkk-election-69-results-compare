@@ -2,22 +2,93 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Drawer from '../components/Drawer.astro';
+
+const SITE = 'https://sudjairakc.github.io/bkk-election-69-results-compare';
+const TITLE = 'เลือกตั้ง ส.ก. กทม. เปรียบเทียบผล ปี 65 → 69 รายเขต';
+const DESC =
+  'เปรียบเทียบผลเลือกตั้ง ส.ก. กรุงเทพฯ ปี 2565 กับ 2569 ครบ 50 เขต — ' +
+  '27 เขตเปลี่ยนกลุ่มพรรค, คนเดิมชนะซ้ำ 32 คน, ประชาชน(ก้าวไกล) 14→22 ที่นั่ง, ' +
+  'เพื่อไทย 20→4, กลุ่มคนทำงาน 0→11 พร้อมกราฟ Sankey, ตาราง และผังเขตแบบ interactive';
+const OG_IMG = `${SITE}/og.png`;
+
+// Structured data — helps Google + AI engines (ChatGPT/Perplexity) understand & cite the dataset
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: TITLE,
+  description: DESC,
+  url: `${SITE}/`,
+  inLanguage: 'th',
+  keywords: [
+    'เลือกตั้ง ส.ก.',
+    'กทม. 2569',
+    'ผลเลือกตั้งกรุงเทพ',
+    'พรรคประชาชน',
+    'เพื่อไทย',
+    'เปรียบเทียบ 65 69',
+  ],
+  temporalCoverage: '2022/2026',
+  spatialCoverage: { '@type': 'Place', name: 'กรุงเทพมหานคร, ประเทศไทย' },
+  creator: { '@type': 'Person', name: 'sudjairakc' },
+  isBasedOn: 'https://www.thaipbs.or.th/bkkelection69/result',
+};
 ---
 <!doctype html>
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>การเปลี่ยนพรรค กทม. 65 → 69</title>
+  <title>{TITLE}</title>
+  <meta name="description" content={DESC} />
+  <link rel="canonical" href={`${SITE}/`} />
+
+  <!-- Open Graph (Facebook / Line / etc.) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="th_TH" />
+  <meta property="og:site_name" content="เลือกตั้ง กทม. 65→69" />
+  <meta property="og:title" content={TITLE} />
+  <meta property="og:description" content={DESC} />
+  <meta property="og:url" content={`${SITE}/`} />
+  <meta property="og:image" content={OG_IMG} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={TITLE} />
+  <meta name="twitter:description" content={DESC} />
+  <meta name="twitter:image" content={OG_IMG} />
+
+  <!-- Structured data for search + AI engines -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <!-- Cloudflare Web Analytics — privacy-first, no cookies.
+       Dashboard: Analytics → Web analytics (hostname sudjairakc.github.io). -->
+  <script
+    is:inline
+    defer
+    src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon='{"token": "961c748b246f41b28df19476e04f5311"}'
+  ></script>
 </head>
 <body>
   <Navbar />
 
   <div class="page-head">
-    <h1 id="pageTitle"></h1>
-    <p class="sub" id="pageSub"></p>
+    <h1 id="pageTitle">การเปลี่ยนพรรค/กลุ่ม ผู้นำเขต กทม. · ปี 65 → ปี 69</h1>
+    <p class="sub" id="pageSub">ผู้สมัครอันดับ 1 แต่ละเขต · 50 เขต · แยกเป็น 2 มุมมอง</p>
     <div class="count-pill" id="countPill"></div>
   </div>
+
+  <!-- Static summary for SEO + AI engines (text the charts render via JS won't expose) -->
+  <p class="intro-summary">
+    เปรียบเทียบผลการเลือกตั้งสมาชิกสภากรุงเทพมหานคร (ส.ก.) ปี 2565 กับ 2569 ครบทั้ง 50 เขต
+    โดยเทียบเฉพาะผู้สมัครอันดับ 1 ของแต่ละเขต ผลสรุป: มี <b>27 เขต</b> ที่เปลี่ยนกลุ่มพรรค
+    (พรรคเดิม 23 เขต), ผู้ชนะ <b>32 คน</b> เป็นคนเดิมที่ชนะซ้ำทั้งสองปี (หน้าใหม่ 18 คน).
+    ด้านที่นั่งรายพรรค พรรคประชาชน (เดิมก้าวไกล) เพิ่มจาก 14 เป็น <b>22 ที่นั่ง</b>,
+    เพื่อไทยลดจาก 20 เหลือ <b>4 ที่นั่ง</b>, และกลุ่มคนทำงานเป็นกลุ่มหน้าใหม่ได้ <b>11 ที่นั่ง</b>.
+    ข้อมูลจาก Thai PBS นับคะแนนแล้วประมาณ 95% (อย่างไม่เป็นทางการ).
+  </p>
 
   <div class="section" id="sec1">
     <div class="sec-head">
