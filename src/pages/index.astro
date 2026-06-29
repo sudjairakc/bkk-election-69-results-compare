@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Drawer from '../components/Drawer.astro';
+---
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>การเปลี่ยนพรรค กทม. 65 → 69</title>
+</head>
+<body>
+  <Navbar />
+
+  <div class="page-head">
+    <h1 id="pageTitle"></h1>
+    <p class="sub" id="pageSub"></p>
+    <div class="count-pill" id="countPill"></div>
+  </div>
+
+  <div class="section" id="sec1">
+    <div class="sec-head">
+      <h2>① ที่นั่งเปลี่ยนมือ — มองที่ “เขต”</h2>
+      <p class="note" id="noteSeat"></p>
+    </div>
+    <svg id="chartSeat" width="980" height="680"></svg>
+  </div>
+
+  <div class="section" id="sec2">
+    <div class="sec-head">
+      <h2>② คนเดิม — มองที่ “คน”</h2>
+      <p class="note" id="notePerson"></p>
+    </div>
+    <svg id="chartPerson" width="980" height="540"></svg>
+  </div>
+
+  <div class="section" id="sec3">
+    <div class="sec-head">
+      <h2>③ จำนวนที่นั่งแต่ละพรรค/กลุ่ม — ปี 65 เทียบ 69</h2>
+      <p class="note">นับรวมตาม “กลุ่มพรรคเดียวกัน” (ก้าวไกล=ประชาชน, เพื่อไทย=เพื่อไทย Life) · หน่วย = เขต (จาก 50)<br />แท่ง<b>จาง</b> = ปี 65 · แท่ง<b>เข้ม</b> = ปี 69</p>
+    </div>
+    <svg id="chartBar" width="980" height="430"></svg>
+  </div>
+
+  <div class="section" id="sec4">
+    <div class="sec-head">
+      <h2>④ ตารางผลรายเขต — ค้นหา / เรียงลำดับได้</h2>
+      <p class="note">พิมพ์เพื่อค้นหาชื่อเขต ผู้สมัคร หรือพรรค · คลิกหัวคอลัมน์เพื่อเรียงลำดับ</p>
+    </div>
+    <div class="controls"><input id="tblSearch" class="search-box" type="text" placeholder="ค้นหา เขต / ผู้สมัคร / พรรค…" /></div>
+    <div class="tbl-scroll"><table class="dtbl" id="dtbl"><thead></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="section" id="sec5">
+    <div class="sec-head">
+      <h2>⑤ ผังเขต ระบายสีตามพรรคผู้ชนะ</h2>
+      <p class="note">แต่ละช่อง = 1 เขต (เรียงตามรหัสเขต) · <b>กรอบประ</b> = เขตที่เปลี่ยนกลุ่มพรรคจาก 65 → 69 · ชี้เพื่อดูรายละเอียด</p>
+    </div>
+    <div class="gridmaps">
+      <div class="gridmap"><h3>ปี 65</h3><div class="tilegrid" id="grid65"></div></div>
+      <div class="gridmap"><h3>ปี 69</h3><div class="tilegrid" id="grid69"></div></div>
+    </div>
+    <div class="legend" id="gridLegend"></div>
+  </div>
+
+  <div class="section" id="sec6">
+    <div class="sec-head">
+      <h2>⑥ คะแนนผู้ชนะรายเขต 65 → 69</h2>
+      <p class="note">จุดซ้าย = คะแนนผู้ชนะปี 65 · จุดขวา = ปี 69 (สีจุด = พรรคของปีนั้น) · เส้น<b style="color:#2e9e5b">เขียว</b> = เพิ่มขึ้น, <b style="color:#d23b37">แดง</b> = ลดลง</p>
+    </div>
+    <div class="controls">
+      <span style="font-size:11.5px;color:var(--sub)">เรียงตาม:</span>
+      <button class="ctrl-btn active" data-sort="id">รหัสเขต</button>
+      <button class="ctrl-btn" data-sort="v69">คะแนนปี 69</button>
+      <button class="ctrl-btn" data-sort="delta">ส่วนต่าง</button>
+    </div>
+    <svg id="chartDumbbell" width="980" height="1180"></svg>
+  </div>
+
+  <div class="section" id="sec7">
+    <div class="sec-head">
+      <h2>⑦ คนกรุงเทพเลือกที่ “คน” หรือ “พรรค”?</h2>
+      <p class="note">เทียบผู้ชนะปี 65 กับ 69 รายเขต แยกเป็น 4 กลุ่ม · <b>คนเดิม</b> = ผู้ชนะคนเดียวกัน · <b>พรรคเดิม</b> = กลุ่มพรรคเดียวกัน (ก้าวไกล=ประชาชน, เพื่อไทย=เพื่อไทย Life) · ชี้ที่ช่อง/แถบเพื่อดูสูตรการคำนวณและรายเขต</p>
+    </div>
+    <div class="pp-wrap">
+      <div class="ppgrid" id="ppMatrix"></div>
+      <div class="pp-side" id="ppSide"></div>
+    </div>
+    <div class="pp-break" id="ppBreak"></div>
+  </div>
+
+  <footer class="page-foot">
+    ข้อมูลจาก <a id="srcLink" target="_blank" rel="noopener"></a><br />
+    <span id="footCounted"></span> · เปรียบเทียบเฉพาะผู้สมัครอันดับ 1 ของแต่ละเขต<br />
+    <span id="footUpdated" style="opacity:.8"></span>
+  </footer>
+
+  <Drawer />
+
+  <script>
+    import '../main';
+  </script>
+</body>
+</html>

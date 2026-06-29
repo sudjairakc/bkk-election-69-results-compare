@@ -1,0 +1,19 @@
+---
+// Sticky top navigation. Behaviour (smooth scroll + scrollspy) lives in src/ui/nav.ts
+const links = [
+  { id: 'sec1', label: '① เขตเปลี่ยนมือ' },
+  { id: 'sec2', label: '② คนเดิม' },
+  { id: 'sec3', label: '③ ที่นั่ง/พรรค' },
+  { id: 'sec4', label: '④ ตาราง' },
+  { id: 'sec5', label: '⑤ ผังเขต' },
+  { id: 'sec6', label: '⑥ คะแนนรายเขต' },
+  { id: 'sec7', label: '⑦ คน/พรรค' },
+];
+---
+<nav class="topnav">
+  <button class="brand" id="navBrand" type="button">กทม. 65→69</button>
+  <div class="navlinks" id="navLinks">
+    {links.map((l) => <button class="navlink" data-target={l.id}>{l.label}</button>)}
+  </div>
+  <button id="themeToggle" class="nav-toggle" aria-label="สลับโหมดสว่าง/มืด" title="สลับโหมดสว่าง/มืด">☀</button>
+</nav>

@@ -1,4 +1,11 @@
-# scratch / build data (embedded in HTML at build time, not needed at runtime)
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# scratch / build data (legacy)
 _data.json
 _data2.json
 dist_data.json
@@ -14,4 +21,4 @@ Thumbs.db
 
 # logs
 *.log
-node_modules/
+npm-debug.log*
