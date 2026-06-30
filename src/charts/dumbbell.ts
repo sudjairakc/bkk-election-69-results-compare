@@ -19,7 +19,8 @@ export function renderDumbbell(): void {
   const LX = 120, RX = W - 95, TOP = 34, rowH = 22;
   const H = TOP + rows.length * rowH + 18;
   svg.setAttribute('height', String(H));
-  mk('rect', { width: W, height: H, fill: CH.bg });
+  // transparent canvas so the page's ambient glow shows through
+  mk('rect', { width: W, height: H, fill: 'transparent' });
   const max = Math.max(1, ...rows.map((r) => Math.max(r.v65 || 0, r.v69 || 0)));
   const x = (v: number) => LX + (v / max) * (RX - LX);
   for (let g = 0; g <= 50000; g += 10000) {

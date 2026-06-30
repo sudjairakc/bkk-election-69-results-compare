@@ -12,7 +12,8 @@ export function renderBar(): void {
   const LX = 180, RX = W - 80, TOP = 20, rowH = 64, barH = 19, gap = 6;
   const H = TOP + CANONS.length * rowH + 16;
   svg.setAttribute('height', String(H));
-  mk('rect', { width: W, height: H, fill: CH.bg });
+  // transparent canvas so the page's ambient glow shows through
+  mk('rect', { width: W, height: H, fill: 'transparent' });
   const max = Math.max(1, ...CANONS.map((c) => Math.max(cnt65[c] || 0, cnt69[c] || 0)));
   const scale = (v: number) => (v / max) * (RX - LX);
   CANONS.forEach((c, i) => {

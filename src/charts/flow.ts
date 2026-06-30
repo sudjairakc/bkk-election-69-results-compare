@@ -31,7 +31,8 @@ function render(cfg: FlowCfg, CH: Chrome): void {
   };
   const L = layout(cfg.P65, LX), R = layout(cfg.P69, RX);
 
-  mk('rect', { width: W, height: H, fill: CH.bg });
+  // transparent canvas so the page's ambient glow shows through
+  mk('rect', { width: W, height: H, fill: 'transparent' });
   txt(LX + NW / 2, TOP - 22, 'ปี ' + META.yearLeft, { 'text-anchor': 'middle', fill: CH.axis, 'font-size': '18', 'font-family': 'BKKDraft5, SaoChingcha, sans-serif', 'font-weight': '700' });
   txt(RX + NW / 2, TOP - 22, 'ปี ' + META.yearRight, { 'text-anchor': 'middle', fill: CH.axis, 'font-size': '18', 'font-family': 'BKKDraft5, SaoChingcha, sans-serif', 'font-weight': '700' });
   mk('line', { x1: LX - 2, y1: TOP - 15, x2: LX + NW + 2, y2: TOP - 15, stroke: CH.axisLine, 'stroke-width': '1' });

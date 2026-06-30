@@ -20,7 +20,7 @@ export interface Meta {
   updatedAt: string;
   yearLeft: string;
   yearRight: string;
-  source: { name: string; url: string };
+  sources: { name: string; url: string }[];
 }
 
 export interface Election {

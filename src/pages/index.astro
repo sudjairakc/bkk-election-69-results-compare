@@ -10,6 +10,7 @@ const DESC =
   '27 เขตเปลี่ยนกลุ่มพรรค, คนเดิมชนะซ้ำ 32 คน, ประชาชน(ก้าวไกล) 14→22 ที่นั่ง, ' +
   'เพื่อไทย 20→4, กลุ่มคนทำงาน 0→11 พร้อมกราฟ Sankey, ตาราง และผังเขตแบบ interactive';
 const OG_IMG = `${SITE}/og.png`;
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '') + '/'; // guarantee one trailing slash
 
 // Structured data — helps Google + AI engines (ChatGPT/Perplexity) understand & cite the dataset
 const jsonLd = {
@@ -41,6 +42,11 @@ const jsonLd = {
   <title>{TITLE}</title>
   <meta name="description" content={DESC} />
   <link rel="canonical" href={`${SITE}/`} />
+
+  <!-- Favicons -->
+  <link rel="icon" href={`${BASE}favicon.ico`} sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href={`${BASE}favicon-32.png`} />
+  <link rel="apple-touch-icon" href={`${BASE}apple-touch-icon.png`} />
 
   <!-- Open Graph (Facebook / Line / etc.) -->
   <meta property="og:type" content="website" />
@@ -87,7 +93,8 @@ const jsonLd = {
     (พรรคเดิม 23 เขต), ผู้ชนะ <b>32 คน</b> เป็นคนเดิมที่ชนะซ้ำทั้งสองปี (หน้าใหม่ 18 คน).
     ด้านที่นั่งรายพรรค พรรคประชาชน (เดิมก้าวไกล) เพิ่มจาก 14 เป็น <b>22 ที่นั่ง</b>,
     เพื่อไทยลดจาก 20 เหลือ <b>4 ที่นั่ง</b>, และกลุ่มคนทำงานเป็นกลุ่มหน้าใหม่ได้ <b>11 ที่นั่ง</b>.
-    ข้อมูลจาก Thai PBS นับคะแนนแล้วประมาณ 95% (อย่างไม่เป็นทางการ).
+    ข้อมูลจากกรุงเทพมหานคร (กทม.) และ Thai PBS · ดูเพิ่มเติมที่ www.เลือกตั้งกรุงเทพ69.com
+    (อย่างไม่เป็นทางการ ณ 29 มิ.ย. 2569).
   </p>
 
   <div class="section" id="sec1">
@@ -162,7 +169,7 @@ const jsonLd = {
   </div>
 
   <footer class="page-foot">
-    ข้อมูลจาก <a id="srcLink" target="_blank" rel="noopener"></a><br />
+    ข้อมูลจาก <span id="srcLinks"></span><br />
     <span id="footCounted"></span> · เปรียบเทียบเฉพาะผู้สมัครอันดับ 1 ของแต่ละเขต<br />
     <span id="footUpdated" style="opacity:.8"></span>
   </footer>
